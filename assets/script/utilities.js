@@ -571,7 +571,7 @@ function changeTitle(lang) {
 }
 
 function format_data(data){
-	console.log(data)
+	// console.log(data)
 
 	const filteredData = data.filter(item => item.avg_pv !== 'ERRORE');
 
@@ -661,7 +661,7 @@ function get_tooltip(dv) {
 			if (params.has('lang') == true) {
 				lang = params.get('lang')
 			}
-			console.log(lang)
+			// console.log(lang)
 
 			// lang = 'it'
 			if (lang == 'it'){

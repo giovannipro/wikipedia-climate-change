@@ -1,10 +1,10 @@
 const container = "#dv2";
 const font_size = 10;
 
-const filter_item = 12; // also in Wikipedia and Italian school is 120
+// const filter_item = 12; // also in Wikipedia and Italian school is 120
 
 const shiftx_article = 30;
-const wiki_link = "https://it.wikipedia.org/wiki/";
+const wiki_link = "https://en.wikipedia.org/wiki/";
 const variation_line_opacity = 0.7;
 const min_avg_pv = 100;
 
@@ -32,7 +32,7 @@ function dv2(the_sort) { // region, category,
 	}
 
 	// load data
-	d3.tsv("../assets/data/voci.tsv")
+	d3.tsv("assets/data/voci.tsv")
 		.then(loaded)
 
 	function loaded(data) {
@@ -171,7 +171,7 @@ function dv2(the_sort) { // region, category,
 		plot.call(tooltip)
 
 		function display_data(the_sort){ // region, category, 
-			console.log(data)
+			// console.log(data)
 			console.log(the_sort)
 
 			the_sort = parseInt(the_sort)
@@ -182,6 +182,14 @@ function dv2(the_sort) { // region, category,
 
 			// filter data by region and category
 			// ---------------------------
+
+			filter_item = 300
+
+			the_data = data.sort((a, b) => a.article.localeCompare(b.article));
+
+			filtered_data = the_data.filter(item =>
+				item.avg_pv > filter_item
+			)
 
 			// if (region == 'all'){
 			// 	// region_data = data 
@@ -272,7 +280,7 @@ function dv2(the_sort) { // region, category,
 					return d.images;
 				})
 			}
-			// console.log(min, max)
+			console.log(min, max)
 
 			y_min = d3.min(filtered_data, function(d) { 
 				return d.avg_pv;
@@ -517,7 +525,7 @@ function dv2(the_sort) { // region, category,
 			sort_box.addEventListener("change", function() {
 				// const region_box = document.getElementById('regions')
 
-				// let new_sort = this.value;
+				let new_sort = this.value;
 				// let new_region = region_box.options[region_box.selectedIndex].value;
 
 				update_sort(new_sort)
