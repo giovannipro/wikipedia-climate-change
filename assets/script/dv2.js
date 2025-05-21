@@ -183,7 +183,7 @@ function dv2(the_sort) { // region, category,
 			// filter data by region and category
 			// ---------------------------
 
-			filter_item = 300
+			filter_item = 100
 
 			the_data = data.sort((a, b) => a.article.localeCompare(b.article));
 
@@ -449,7 +449,7 @@ function dv2(the_sort) { // region, category,
 				})
 				.attr("target","_blank")
 
-			const color = d3.scaleOrdinal(d3.schemeSet2);
+			const color = d3.scaleOrdinal(d3.schemePaired);
 
 			let circles = article_circles.append("circle")
 				.transition()
@@ -817,7 +817,7 @@ function dv2(the_sort) { // region, category,
 				translate_articles = shiftx_article
 				reduction = 100
 			}
-			console.log(width, translate_articles, reduction)
+			// console.log(width, translate_articles, reduction)
 
 			svg
 				.attr("width", width + (margin.right + margin.right))
