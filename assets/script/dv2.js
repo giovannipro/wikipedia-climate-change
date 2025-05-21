@@ -449,6 +449,8 @@ function dv2(the_sort) { // region, category,
 				})
 				.attr("target","_blank")
 
+			const color = d3.scaleOrdinal(d3.schemeSet2);
+
 			let circles = article_circles.append("circle")
 				.transition()
 				.duration(500)
@@ -457,9 +459,10 @@ function dv2(the_sort) { // region, category,
 				})
 				.attr("cx",0)
 				.attr("cy",0)	
-				.attr("fill", function(d,i){
-					return "#00b2ff"
-				})
+				.attr("fill", d => color(d.instance))
+				// .attr("fill", function(d,i){
+				// 	return "#00b2ff"
+				// })
 				.attr("opacity",0.5)
 				.attr("r",0)
 				.transition()

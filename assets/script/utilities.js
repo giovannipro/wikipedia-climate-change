@@ -693,7 +693,7 @@ function get_tooltip(dv) {
 			// content += "<p style='color: red; margin: 0;'>" + i + "</p>" // debug  
 			content += "<p style='font-weight: bold; margin: 0 0 .4rem .2rem;'>" + d.article + "</p>";
             content += "<p style='margin: 0 0 .8rem .2rem;'>" 
-            // content += "<span>" + d.category + "</span><br>" // get_category(d.id_wikidata ,d.article, d.instances)
+            content += "<span>" + d.instance + "</span><br>" 
             content += "<span>" + creation_date + d.first_edit.slice(0,10) + "</span></p>" // format_date(d.first_edit) 
 
             content += '<hr style="border: 0.5px solid #e3e3e3"/>'
