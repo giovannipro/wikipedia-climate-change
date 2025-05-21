@@ -1,0 +1,139 @@
+#menu {
+	width: 100%;
+	display: flex;
+}
+
+#menu ul li:nth-child(3)  {
+	width: 40%;
+}
+
+#language {
+	display: flex;
+	margin: 0; 
+	width: 3rem;
+	padding: 4px 10px 2px 4px; 
+	border-left: 1px solid #d6d5d5; 
+	text-align: center; 
+	background-color: #efefef; 
+	cursor: pointer;
+}
+
+.language_icon {
+	background: url(../img/language.svg) center center / 55% no-repeat;
+	width: 25px;
+}
+
+.language_name {
+	width: 33%;
+	text-align: right; 
+	font-size: .85rem;
+	padding-top: 0.6rem;
+}
+
+@media only screen and (max-width: 768px) {
+
+	.language_name {
+		width: auto;
+		padding-top: 0rem;
+	}
+
+}
+
+.menu li {
+	border-bottom: 1px solid #d6d5d5;
+}
+
+#menu ul li {
+	text-align: center;
+}
+
+.en {
+	display: none;
+}
+
+#dv_box {
+	position: relative;
+	border-bottom: 1px solid #979797;
+}
+
+#dv2 {
+	width: 100%;
+}
+
+@media only screen and (max-width: 900px) {
+	#sidebar {
+		width: 45%;
+	}
+}
+
+@media only screen and (max-width: 768px) {
+
+	#sidebar {
+		width: 80%;
+	}
+
+	#sidebar .data .value {
+		width: 30%;
+	}
+
+	#sidebar .data a {
+		width: 70%;
+	}
+
+}
+
+#legend {
+	padding: 20px 0;
+}
+
+/* -------- scale -------- */
+
+#scale_button_box {
+	margin: 4.75rem 1.5rem 0 1.5rem;
+}
+
+#scale_button_box .tooltips {
+	font-size: 12px;
+	color: gray;
+	line-height: 1rem;
+  position: relative;
+	left: -10px;
+	top: 10px;
+  width: 60px;
+  display: none;
+}
+
+#scale_button_icon {
+	background: url(../img/scale_log.svg) center center / 55% no-repeat;
+	width: 40px;
+	height: 40px;
+}
+
+#scale_tooltip_logarithmic {
+	display: none;
+}
+
+#scale_button_box:hover .tooltips {
+	display: block;
+}
+
+/* -------- issue grid -------- */ 
+
+/*#grid_issues .tick line {
+  fill: none;
+  stroke: white;
+  opacity: 1;
+  stroke-width: 2;
+}*/
+
+#yAxis_issues g:nth-child(2) {
+	display: none;
+/*	color: white;*/
+}
+
+#grid_issues .tick line {
+	display: none;
+}
+
+
+
