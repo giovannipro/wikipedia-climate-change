@@ -1,7 +1,7 @@
 const container = "#dv2";
 const font_size = 10;
 
-// const filter_item = 12; // also in Wikipedia and Italian school is 120
+const filter_item = 100;
 
 const shiftx_article = 30;
 const wiki_link = "https://en.wikipedia.org/wiki/";
@@ -116,7 +116,7 @@ function dv2(the_sort) { // region, category,
 			.text("visite giornaliere (media)")
 			.attr("data-it","visite giornaliere (media)")
 			.attr("data-en","daily visits (average)")
-			.attr("y",2)
+			.attr("y", -18)
 			.attr("font-size",font_size)
 
 		function make_y_gridlines() {		
@@ -182,8 +182,6 @@ function dv2(the_sort) { // region, category,
 
 			// filter data by region and category
 			// ---------------------------
-
-			filter_item = 100
 
 			the_data = data.sort((a, b) => a.article.localeCompare(b.article));
 
@@ -461,7 +459,7 @@ function dv2(the_sort) { // region, category,
 			// };
 			// const getColor = instance => categoryColors[instance] || "#d5d5d5";
 
-			console.log([...new Set(data.map(d => d.instance))]);
+			// console.log([...new Set(data.map(d => d.instance))]);
 
 			let circles = article_circles.append("circle")
 				.transition()

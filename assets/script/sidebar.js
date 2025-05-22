@@ -46,13 +46,16 @@ function sidebar(dv,data,the_sort){
 			max = -Infinity;
 		}
 
+
 		// sort data and get max
 		if (dv == 2){
 			if (the_sort == 1){
-				data.sort((a, b) => {
-					return a.article - b.article;
-				})
-				max = Math.max(...data.map((a,b) => a.editors))
+				// data.sort((a, b) => {
+				// 	return a.article - b.article;
+				// })
+				
+				data = data.sort((a, b) => a.article.localeCompare(b.article));
+				max = Math.max(...data.map((a,b) => a.article))
 			}
 			else if (the_sort == 2){
 				data.sort((a, b) => {
@@ -96,6 +99,8 @@ function sidebar(dv,data,the_sort){
 				})
 				max = Math.max(...data.map((a,b) => a.linguistic_versions))
 			}
+
+			// console.log(dv, min, max)
 		}
 		else if (dv == 3) {
 			if (the_sort == 1){
@@ -210,17 +215,17 @@ function sidebar(dv,data,the_sort){
 				output += '<a class="item_box" href="#">'
 			}
 			
-			output += '<div class="item_bubble" id="' + d.id_wikidata + '"></div>'
+			output += '<div class="item_bubble" id="_' + d.id + '"></div>'
 
 			output += '<div class="item_value">'
 			output += '<div class="item_list">'
 
 			// console.log(d.article_wikipedia)
 			if (d.article_wikipedia != "Voce non esistente"){
-				output += '<div class="article_list" data-id="' + d.id_wikidata + '">' + d.article + '</div>'
+				output += '<div class="article_list" data-id="_' + d.id + '">' + d.article + '</div>'
 			}
 			else {
-				output += '<div class="article_list" data-id="' + d.id_wikidata + '">' + d.article + ' <br/><span style="color: #f57e7e;">(voce non esistente)</span></div>'
+				output += '<div class="article_list" data-id="_' + d.id + '">' + d.article + ' <br/><span style="color: #f57e7e;">(voce non esistente)</span></div>'
 			}
 			
 
@@ -241,7 +246,9 @@ function sidebar(dv,data,the_sort){
 			output += '</li>'
 
 
-			let container = d.id_wikidata
+			let container = '_' + d.id // id_wikidata
+
+			// let max_size = Math.max(...data.map((a,b) => a.size))
 			make_article_bubble(container,d)
 
 		})
@@ -252,16 +259,18 @@ function sidebar(dv,data,the_sort){
 
 		// add bubbles
 		data.forEach(function (d,i) {
-			let container = d.id_wikidata
+			let container = '_' + d.id
 			make_article_bubble(container,d)
 		})
 
+		
 		function make_article_bubble(container,individual_data){
-			// console.log(individual_data)	
-
+			// console.log(max_size)	
+			
 			const box_size = 40
+			const max_article_size = 393000
 
-			let r_max = Math.sqrt(318000/3.14)
+			let r_max = Math.sqrt(max_article_size/3.14)
 
 			let r = d3.scaleLinear()
 				.range([min_circle_size, box_size/2])
@@ -286,27 +295,27 @@ function sidebar(dv,data,the_sort){
 				})
 				.attr("opacity",0.5)
 
-			let incipit = article_box
-				.append("circle")
-				.attr("cx", box_size/2)
-				.attr("cy", box_size/2)
-				.attr("r", r(Math.sqrt(individual_data.incipit_size/3.14)) )
-				.attr("fill", function(d,i){
-					return "#00b2ff"
-				})
-				.attr("opacity",0.5)
+			// let incipit = article_box
+			// 	.append("circle")
+			// 	.attr("cx", box_size/2)
+			// 	.attr("cy", box_size/2)
+			// 	.attr("r", r(Math.sqrt(individual_data.incipit_size/3.14)) )
+			// 	.attr("fill", function(d,i){
+			// 		return "#00b2ff"
+			// 	})
+			// 	.attr("opacity",0.5)
 
-			let discussion = article_box
-				.append("circle")
-				.attr("cx", box_size/2)
-				.attr("cy", box_size/2)
-				.attr("r", r(Math.sqrt(individual_data.discussion_size/3.14)) )
-				.attr("stroke", function(d,i){
-					return "#00b2ff"
-				})
-				.attr("opacity",0.9)
-				.attr("fill","transparent")
-				.attr("stroke-width",0.5)
+			// let discussion = article_box
+			// 	.append("circle")
+			// 	.attr("cx", box_size/2)
+			// 	.attr("cy", box_size/2)
+			// 	.attr("r", r(Math.sqrt(individual_data.discussion_size/3.14)) )
+			// 	.attr("stroke", function(d,i){
+			// 		return "#00b2ff"
+			// 	})
+			// 	.attr("opacity",0.9)
+			// 	.attr("fill","transparent")
+			// 	.attr("stroke-width",0.5)
 		}
 	}
 	load_sidebar()
