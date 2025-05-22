@@ -450,6 +450,18 @@ function dv2(the_sort) { // region, category,
 				.attr("target","_blank")
 
 			const color = d3.scaleOrdinal(d3.schemePaired);
+			// const categoryColors = {
+			// 	"human": "#e41a1c",
+			// 	"aspect in a geographic region": "#377eb8",
+			// 	"climate of geographic location": "#4daf4a",
+			// 	"Wikimedia list article": "#B2E0D2",
+			// 	"climate change by country or territory": "#F2E1C9",
+			// 	"film": "#FDC6B0",
+			// 	"": "#ccc"
+			// };
+			// const getColor = instance => categoryColors[instance] || "#d5d5d5";
+
+			console.log([...new Set(data.map(d => d.instance))]);
 
 			let circles = article_circles.append("circle")
 				.transition()
@@ -459,7 +471,12 @@ function dv2(the_sort) { // region, category,
 				})
 				.attr("cx",0)
 				.attr("cy",0)	
+				// .attr("fill", d => {
+				// 	console.log(d.instance, getColor(d.instance))
+				// 	return getColor(d.instance)
+				// })
 				.attr("fill", d => color(d.instance))
+				
 				// .attr("fill", function(d,i){
 				// 	return "#00b2ff"
 				// })
