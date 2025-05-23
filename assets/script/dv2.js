@@ -6,7 +6,13 @@ const filter_item = 100;
 const shiftx_article = 30;
 const wiki_link = "https://en.wikipedia.org/wiki/";
 const variation_line_opacity = 0.7;
+
 const min_avg_pv = 100;
+
+let limit_y_min = min_avg_pv 
+let limit_y_max = 10000
+let max_update = 0
+let min_update = 0
 
 const stroke_dash = "3,3";
 
@@ -170,9 +176,9 @@ function dv2(the_sort) { // region, category,
 
 		plot.call(tooltip)
 
-		function display_data(the_sort){ // region, category, 
+		function display_data(the_sort,limit_y_min, limit_y_max){ // region, category, 
 			// console.log(data)
-			console.log(the_sort)
+			// console.log(the_sort)
 
 			the_sort = parseInt(the_sort)
 
@@ -186,7 +192,11 @@ function dv2(the_sort) { // region, category,
 			the_data = data.sort((a, b) => a.article.localeCompare(b.article));
 
 			filtered_data = the_data.filter(item =>
-				item.avg_pv > filter_item
+				// item.avg_pv > filter_item 
+				// &&
+				item.avg_pv > limit_y_min
+				&&
+				item.avg_pv  < limit_y_max
 			)
 
 			// if (region == 'all'){
@@ -278,7 +288,7 @@ function dv2(the_sort) { // region, category,
 					return d.images;
 				})
 			}
-			console.log(min, max)
+			// console.log(min, max)
 
 			y_min = d3.min(filtered_data, function(d) { 
 				return d.avg_pv;
@@ -541,7 +551,6 @@ function dv2(the_sort) { // region, category,
 			// ---------------------------
 			const sort_box = document.getElementById('sort_article')
 			sort_box.addEventListener("change", function() {
-				// const region_box = document.getElementById('regions')
 
 				let new_sort = this.value;
 				// let new_region = region_box.options[region_box.selectedIndex].value;
@@ -698,7 +707,7 @@ function dv2(the_sort) { // region, category,
 			}
 
 		}
-		display_data(the_sort) // region, category,
+		display_data(the_sort,filter_item, 100000) // region, category,
 
 		// chart scale
 		// ---------------------------
@@ -787,6 +796,41 @@ function dv2(the_sort) { // region, category,
 				    	to_log()
 				    }
 				};
+
+				document.onkeydown = function (e) {
+				    var key = e.key;
+					
+					unit = 200
+					
+				    if(key == 'q') { 
+						max_update += unit
+				    }
+				    else if (key == 'a'){
+						max_update -= unit
+				    }
+
+					if(key == 'w') { // w
+						min_update += unit
+				    }
+				    else if (key == 's'){ // s
+						min_update -= unit
+				    }
+
+					if (key == 'q' || key == 'a' || key == 'w' || key == 's'){
+						setTimeout(function() { 
+							new_limit_y_min = limit_y_min + min_update
+							new_limit_y_max = limit_y_max + max_update
+	
+							display_data(the_sort, new_limit_y_min, new_limit_y_max)
+	
+							console.log(new_limit_y_min, new_limit_y_max)
+						}, 500);
+					}
+
+
+					
+				};
+
 		}
 		chart_scale()
 
