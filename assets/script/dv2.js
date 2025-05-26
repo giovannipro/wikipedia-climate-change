@@ -463,13 +463,15 @@ function dv2(the_sort) { // region, category,
 				"Wikimedia list article": "#B2E0D2",
 				"climate change by country or territory": "#F2E1C9",
 				"film": "#FDC6B0",
-				"default": "#ccc",
 				"literary work": "red",
 				"business": "blue",
 				"industry": "orange",
 				"nonprofit organization": "yellow",
-				"environmental effects":"violet"
-				// "": "#ccc"
+				"environmental effects":"violet",
+				"academic discipline":"lightgreen",
+				"organization":"lightcoral",
+				"taxon":"lightpink",
+				"default": "#ccc"
 			};
 			// const getColor = instance => categoryColors[instance] || "#d5d5d5";
 
