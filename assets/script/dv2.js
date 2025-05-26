@@ -174,6 +174,47 @@ function dv2(the_sort) { // region, category,
 
 		plot.call(tooltip)
 
+					// update the top bar filters
+			// --------------
+
+		const min_pageviews = document.getElementById("min_pageviews")
+		const max_pageviews = document.getElementById("max_pageviews")
+
+		min_pageviews.value	= limit_y_min;
+		max_pageviews.value = limit_y_max;
+
+		const filter_instance = document.getElementById("filter_instance");
+		// filter_instance.innerHTML = "<option value='all' class='lang_switch' data-it='all' data-en='all'>all</option>"; 
+
+		// remove categoris with count < 2
+		const counts = filtered_data.reduce((acc, d) => {
+		acc[d.instance] = (acc[d.instance] || 0) + 1;
+		return acc;
+		}, {});
+
+		// const sortedCategories = Object.entries(counts)
+		// 	.filter(([cat, count]) => count >= 2)
+		// 	.sort((a, b) => b[1] - a[1]); // Sort by count descending
+
+		const sortedCategories = Object.entries(counts)
+			.filter(([cat, count]) => count >= 1)
+			.sort((a, b) => {
+				// First sort by count descending
+				if (b[1] !== a[1]) return b[1] - a[1];
+
+				// Then sort alphabetically ascending
+				return a[0].localeCompare(b[0]);
+		});
+
+		// the_instances = instances.sort((a, b) => a.article.localeCompare(b.article));
+		
+		sortedCategories.forEach(([cat, count]) => {
+			const option = document.createElement("option");
+			option.value = cat;
+			option.textContent = `${cat} (${count})`;  // Optional: show count
+			filter_instance.appendChild(option);
+		});
+
 		function display_data(instance,the_sort,limit_y_min, limit_y_max){ // region, category, 
 			// console.log(data)
 			// console.log(the_sort)
@@ -205,47 +246,6 @@ function dv2(the_sort) { // region, category,
 					item.avg_pv  < limit_y_max
 				)
 			}
-
-			// update the top bar filters
-			// --------------
-
-			const min_pageviews = document.getElementById("min_pageviews")
-			const max_pageviews = document.getElementById("max_pageviews")
-
-			min_pageviews.value	= limit_y_min;
-			max_pageviews.value = limit_y_max;
-
-			const select_instance = document.getElementById("filter_instance");
-
-			// remove categoris with count < 2
-			const counts = filtered_data.reduce((acc, d) => {
-			acc[d.instance] = (acc[d.instance] || 0) + 1;
-			return acc;
-			}, {});
-
-			// const sortedCategories = Object.entries(counts)
-			// 	.filter(([cat, count]) => count >= 2)
-			// 	.sort((a, b) => b[1] - a[1]); // Sort by count descending
-
-			const sortedCategories = Object.entries(counts)
-				.filter(([cat, count]) => count >= 1)
-				.sort((a, b) => {
-					// First sort by count descending
-					if (b[1] !== a[1]) return b[1] - a[1];
-
-					// Then sort alphabetically ascending
-					return a[0].localeCompare(b[0]);
-			});
-
-			// the_instances = instances.sort((a, b) => a.article.localeCompare(b.article));
-			
-			sortedCategories.forEach(([cat, count]) => {
-				const option = document.createElement("option");
-				option.value = cat;
-				option.textContent = `${cat} (${count})`;  // Optional: show count
-				select_instance.appendChild(option);
-			});
-
 
 			// if (region == 'all'){
 			// 	// region_data = data 
@@ -856,9 +856,9 @@ function dv2(the_sort) { // region, category,
 
 				filter_instance.addEventListener('change', function() {
 					
-					filter_instance.innerHTML = ""; 
-					filter_instance.innerHTML = '<option value="all">all</option>';
-					
+					// filter_instance.innerHTML = ""; 
+					// filter_instance.innerHTML = '<option value="all">all</option>';
+
 					update_filter()
 				})
 				
@@ -870,8 +870,8 @@ function dv2(the_sort) { // region, category,
 					const new_limit_y_min = parseInt(min_pageviews.value)
 					const new_limit_y_max = parseInt(max_pageviews.value)
 					const instance = the_instance.value
-					// console.log(new_limit_y_min, new_limit_y_max, instance)
-	
+
+					console.log(instance, new_limit_y_min, new_limit_y_max)
 					display_data(instance, the_sort, new_limit_y_min, new_limit_y_max)
 				}
 
