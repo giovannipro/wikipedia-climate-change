@@ -521,7 +521,8 @@ function dv2(the_sort) { // region, category,
 				"academic discipline":"lightgreen",
 				"organization":"lightcoral",
 				"taxon":"lightpink",
-				"default": "#ccc"
+				"": "#ccc",
+				"default": "#7f7f7f"
 			};
 			// const getColor = instance => categoryColors[instance] || "#d5d5d5";
 
@@ -871,7 +872,7 @@ function dv2(the_sort) { // region, category,
 					const new_limit_y_max = parseInt(max_pageviews.value)
 					const instance = the_instance.value
 
-					console.log(instance, new_limit_y_min, new_limit_y_max)
+					// console.log(instance, new_limit_y_min, new_limit_y_max)
 					display_data(instance, the_sort, new_limit_y_min, new_limit_y_max)
 				}
 
