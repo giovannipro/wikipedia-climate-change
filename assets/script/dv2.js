@@ -7,10 +7,8 @@ const shiftx_article = 30;
 const wiki_link = "https://en.wikipedia.org/wiki/";
 const variation_line_opacity = 0.7;
 
-const min_avg_pv = 100;
-
-let limit_y_min = min_avg_pv 
-let limit_y_max = 68000
+let limit_y_min = 100
+let limit_y_max = 70000
 let max_update = 0
 let min_update = 0
 
@@ -176,7 +174,7 @@ function dv2(the_sort) { // region, category,
 
 		plot.call(tooltip)
 
-		function display_data(the_sort,limit_y_min, limit_y_max){ // region, category, 
+		function display_data(instance,the_sort,limit_y_min, limit_y_max){ // region, category, 
 			// console.log(data)
 			// console.log(the_sort)
 
@@ -191,11 +189,63 @@ function dv2(the_sort) { // region, category,
 
 			the_data = data.sort((a, b) => a.article.localeCompare(b.article));
 
-			filtered_data = the_data.filter(item =>
-				item.avg_pv > limit_y_min
-				&&
-				item.avg_pv  < limit_y_max
-			)
+			if (instance == 'all'){
+				filtered_data = the_data.filter(item =>
+					item.avg_pv > limit_y_min
+					&&
+					item.avg_pv  < limit_y_max
+				)
+			}
+			else {
+				filtered_data = the_data.filter(item =>
+					item.instance == instance
+					&&
+					item.avg_pv > limit_y_min
+					&&
+					item.avg_pv  < limit_y_max
+				)
+			}
+
+			// update the top bar filters
+			// --------------
+
+			const min_pageviews = document.getElementById("min_pageviews")
+			const max_pageviews = document.getElementById("max_pageviews")
+
+			min_pageviews.value	= limit_y_min;
+			max_pageviews.value = limit_y_max;
+
+			const select_instance = document.getElementById("filter_instance");
+
+			// remove categoris with count < 2
+			const counts = filtered_data.reduce((acc, d) => {
+			acc[d.instance] = (acc[d.instance] || 0) + 1;
+			return acc;
+			}, {});
+
+			// const sortedCategories = Object.entries(counts)
+			// 	.filter(([cat, count]) => count >= 2)
+			// 	.sort((a, b) => b[1] - a[1]); // Sort by count descending
+
+			const sortedCategories = Object.entries(counts)
+				.filter(([cat, count]) => count >= 1)
+				.sort((a, b) => {
+					// First sort by count descending
+					if (b[1] !== a[1]) return b[1] - a[1];
+
+					// Then sort alphabetically ascending
+					return a[0].localeCompare(b[0]);
+			});
+
+			// the_instances = instances.sort((a, b) => a.article.localeCompare(b.article));
+			
+			sortedCategories.forEach(([cat, count]) => {
+				const option = document.createElement("option");
+				option.value = cat;
+				option.textContent = `${cat} (${count})`;  // Optional: show count
+				select_instance.appendChild(option);
+			});
+
 
 			// if (region == 'all'){
 			// 	// region_data = data 
@@ -466,7 +516,7 @@ function dv2(the_sort) { // region, category,
 				"literary work": "red",
 				"business": "blue",
 				"industry": "orange",
-				"nonprofit organization": "yellow",
+				"nonprofit organization": "#eacd40",
 				"environmental effects":"violet",
 				"academic discipline":"lightgreen",
 				"organization":"lightcoral",
@@ -714,7 +764,7 @@ function dv2(the_sort) { // region, category,
 			}
 
 		}
-		display_data(the_sort,filter_item, 100000) // region, category,
+		display_data('all',the_sort,filter_item, limit_y_max) // region, category,
 
 		// chart scale
 		// ---------------------------
@@ -794,19 +844,36 @@ function dv2(the_sort) { // region, category,
 				    }
 				})
 
+				// filter by page views an by instane
+				// --------------------
+
 				const display_filter = document.getElementById("display_filter")
+				const filter_instance = document.getElementById("filter_instance")
 
 				display_filter.addEventListener('click', (event) => {
-					const min_pageviews = document.getElementById("min_pageviews")
-					const max_pageviews = document.getElementById("max_pageviews")
-
-					const new_limit_y_min = parseInt(min_pageviews.value)
-					const new_limit_y_max = parseInt(max_pageviews.value)
-					// console.log(new_limit_y_min, new_limit_y_max)
-
-					display_data(the_sort, new_limit_y_min, new_limit_y_max)
+					update_filter()
 				})
 
+				filter_instance.addEventListener('change', function() {
+					
+					filter_instance.innerHTML = ""; 
+					filter_instance.innerHTML = '<option value="all">all</option>';
+					
+					update_filter()
+				})
+				
+				function update_filter(){
+					const min_pageviews = document.getElementById("min_pageviews")
+					const max_pageviews = document.getElementById("max_pageviews")
+					const the_instance = document.getElementById("filter_instance")
+	
+					const new_limit_y_min = parseInt(min_pageviews.value)
+					const new_limit_y_max = parseInt(max_pageviews.value)
+					const instance = the_instance.value
+					// console.log(new_limit_y_min, new_limit_y_max, instance)
+	
+					display_data(instance, the_sort, new_limit_y_min, new_limit_y_max)
+				}
 
 				// document.onkeydown = function (e) {
 				//     var key = e.key;
