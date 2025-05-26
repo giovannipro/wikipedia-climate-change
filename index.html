@@ -125,7 +125,25 @@
 							</select>
 							</select>
 						</div> -->
-						<div class="selector" style="width: 100%;">
+						<div class="selector" style="width: 49%;">
+							<p class="key noselect lang_switch" data-it="Media pagine viste" data-en="Average page views">Media pagine viste</p>
+							
+							<div style="display: flex; justify-content: space-between; width: 100%; margin-top: 0.5rem;">
+								<div style="width: 33%;">
+									<span class="lang_switch" data-it="Minimo" data-en="Minimum">Minimo</span>
+									<input type="number" id="min_pageviews" min="0" max="10000" style="height: 1.5rem; width: 6rem; border: 1px solid #b3b3b3;"/>
+								</div>
+								<div style="width: 33%;">
+									<span class="lang_switch" data-it="Massimo" data-en="Maximum">Massimo</span>
+									<input type="number" id="max_pageviews" min="0" max="10000" style="height: 1.5rem; width: 6rem; border: 1px solid #b3b3b3;"/>
+								</div>
+								<div style="width: 33%;">
+									<button" id="display_filter" class="button_filter lang_switch" data-it="Applica" data-en="Apply">Applica</button>
+								</div>
+							</div>
+
+						</div>
+						<div class="selector" style="width: 49%;">
 							<p class="key noselect lang_switch" data-it="Ordina per" data-en="Sort by">Ordina per</p>
 							<select name="sort" id="sort_article" class="select value noselect" style="width: 100%;">
 								<option name="article" value="1" class="lang_switch" data-it="titolo" data-en="title">

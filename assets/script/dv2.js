@@ -10,7 +10,7 @@ const variation_line_opacity = 0.7;
 const min_avg_pv = 100;
 
 let limit_y_min = min_avg_pv 
-let limit_y_max = 10000
+let limit_y_max = 68000
 let max_update = 0
 let min_update = 0
 
@@ -192,8 +192,6 @@ function dv2(the_sort) { // region, category,
 			the_data = data.sort((a, b) => a.article.localeCompare(b.article));
 
 			filtered_data = the_data.filter(item =>
-				// item.avg_pv > filter_item 
-				// &&
 				item.avg_pv > limit_y_min
 				&&
 				item.avg_pv  < limit_y_max
@@ -457,16 +455,22 @@ function dv2(the_sort) { // region, category,
 				})
 				.attr("target","_blank")
 
-			const color = d3.scaleOrdinal(d3.schemePaired);
-			// const categoryColors = {
-			// 	"human": "#e41a1c",
-			// 	"aspect in a geographic region": "#377eb8",
-			// 	"climate of geographic location": "#4daf4a",
-			// 	"Wikimedia list article": "#B2E0D2",
-			// 	"climate change by country or territory": "#F2E1C9",
-			// 	"film": "#FDC6B0",
-			// 	"": "#ccc"
-			// };
+			// const color = d3.scaleOrdinal(d3.schemePaired);
+			const categoryColors = {
+				"human": "#e41a1c",
+				"aspect in a geographic region": "#377eb8",
+				"climate of geographic location": "#4daf4a",
+				"Wikimedia list article": "#B2E0D2",
+				"climate change by country or territory": "#F2E1C9",
+				"film": "#FDC6B0",
+				"default": "#ccc",
+				"literary work": "red",
+				"business": "blue",
+				"industry": "orange",
+				"nonprofit organization": "yellow",
+				"environmental effects":"violet"
+				// "": "#ccc"
+			};
 			// const getColor = instance => categoryColors[instance] || "#d5d5d5";
 
 			// console.log([...new Set(data.map(d => d.instance))]);
@@ -483,7 +487,8 @@ function dv2(the_sort) { // region, category,
 				// 	console.log(d.instance, getColor(d.instance))
 				// 	return getColor(d.instance)
 				// })
-				.attr("fill", d => color(d.instance))
+				.attr("fill", d => categoryColors[d.instance] || categoryColors.default)
+				// .attr("fill", d => color(d.instance))
 				
 				// .attr("fill", function(d,i){
 				// 	return "#00b2ff"
@@ -787,49 +792,63 @@ function dv2(the_sort) { // region, category,
 				    }
 				})
 
-				document.onkeydown = function (e) {
-				    var key = e.key;
-				    if(key == 1) { // s
-						to_linear()
-				    }
-				    else if (key == 2){
-				    	to_log()
-				    }
-				};
+				const display_filter = document.getElementById("display_filter")
 
-				document.onkeydown = function (e) {
-				    var key = e.key;
+				display_filter.addEventListener('click', (event) => {
+					const min_pageviews = document.getElementById("min_pageviews")
+					const max_pageviews = document.getElementById("max_pageviews")
+
+					const new_limit_y_min = parseInt(min_pageviews.value)
+					const new_limit_y_max = parseInt(max_pageviews.value)
+					// console.log(new_limit_y_min, new_limit_y_max)
+
+					display_data(the_sort, new_limit_y_min, new_limit_y_max)
+				})
+
+
+				// document.onkeydown = function (e) {
+				//     var key = e.key;
+				//     if(key == 1) { // s
+				// 		to_linear()
+				//     }
+				//     else if (key == 2){
+				//     	to_log()
+				//     }
+				// };
+
+				// document.onkeydown = function (e) {
+				//     var key = e.key;
 					
-					unit = 200
+				// 	unit = 200
 					
-				    if(key == 'q') { 
-						max_update += unit
-				    }
-				    else if (key == 'a'){
-						max_update -= unit
-				    }
+				//     if(key == 'q') { 
+				// 		max_update += unit
+				//     }
+				//     else if (key == 'a'){
+				// 		max_update -= unit
+				//     }
 
-					if(key == 'w') { // w
-						min_update += unit
-				    }
-				    else if (key == 's'){ // s
-						min_update -= unit
-				    }
+				// 	if(key == 'w') { // w
+				// 		min_update += unit
+				//     }
+				//     else if (key == 's'){ // s
+				// 		min_update -= unit
+				//     }
 
-					if (key == 'q' || key == 'a' || key == 'w' || key == 's'){
-						setTimeout(function() { 
-							new_limit_y_min = limit_y_min + min_update
-							new_limit_y_max = limit_y_max + max_update
+				// 	if (key == 'q' || key == 'a' || key == 'w' || key == 's'){
+				// 		setTimeout(function() { 
+				// 			new_limit_y_min = limit_y_min + min_update
+				// 			new_limit_y_max = limit_y_max + max_update
 	
-							display_data(the_sort, new_limit_y_min, new_limit_y_max)
+				// 			display_data(the_sort, new_limit_y_min, new_limit_y_max)
 	
-							console.log(new_limit_y_min, new_limit_y_max)
-						}, 500);
-					}
+				// 			console.log(new_limit_y_min, new_limit_y_max)
+				// 		}, 500);
+				// 	}
 
 
 					
-				};
+				// };
 
 		}
 		chart_scale()

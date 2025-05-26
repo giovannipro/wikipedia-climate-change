@@ -331,6 +331,17 @@ header a {
   padding: 5px 10px;
 }
 
+.button_filter {
+  background-color: #eaeaea;
+  border-radius: 1rem;
+  display: block;
+  width: 7rem;
+  height: 1.7rem;
+  text-align: center;
+  padding-top: 0.2rem;
+  cursor: pointer;
+}
+
 /* ------- map ------- */
 #map1 {
   height: 68vh;
