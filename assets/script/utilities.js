@@ -617,7 +617,7 @@ function format_data(data){
 		d.days = +d.days
 		d.edits = +d.edits
 		d.editors = +d.editors
-		d.edits_editors_ratio = d.edits / d.editors
+		d.edits_editors_ratio = parseFloat((+d.edits / +d.editors).toFixed(1))
 
 		if (d.references !== "-"){
 			d.references = +d.references
@@ -786,6 +786,13 @@ function get_tooltip(dv) {
 			the_images += "<td></td>"
 			the_images += "</tr>"
 
+			the_editors_ratio = ''
+			the_editors_ratio += "<tr>"
+			the_editors_ratio += "<td class='label'>" + 'ratio edits/editors' + "</td>"
+			the_editors_ratio += "<td class='value'>" + d.edits_editors_ratio.toLocaleString() + "</td>"
+			the_editors_ratio += "<td></td>"
+			the_editors_ratio += "</tr>"
+
 			the_edits = ''
 			the_edits += "<tr>"
 			the_edits += "<td class='label'>" + edits + "</td>"
@@ -823,6 +830,7 @@ function get_tooltip(dv) {
 				content += the_images
 				content += the_edits
 				content += the_editors
+				content += the_editors_ratio
 			}
 			// else if (dv == 'dv3'){
 			// 	content += avg_daily_visits
