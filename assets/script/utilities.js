@@ -8,7 +8,7 @@ const categoryColors = {
 	"aspect in a geographic region": "#377eb8",
 	"climate of geographic location": "#4daf4a",
 	"Wikimedia list article": "#B2E0D2",
-	"climate change by country or territory": "#F2E1C9",
+	"climate change by country or territory": "#efbc15",
 	"film": "#FDC6B0",
 	"literary work": "red",
 	"business": "blue",
