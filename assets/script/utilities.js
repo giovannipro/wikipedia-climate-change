@@ -21,7 +21,7 @@ const categoryColors = {
 	"treaty":"#c8b0e9",
 	"United Nations Climagte Change Conference": "#32b732",
 	"": "#ccc",
-	"default": "#adacac"
+	"default": "#d8e5e5" //"#adacac"
 };
 
 function formatNumber(num) {
@@ -765,12 +765,12 @@ function get_tooltip(dv) {
 			the_discussion += "<td></td>"
 			the_discussion += "</tr>"
 
-        	// the_issues = ''
-			// the_issues += "<tr>"
-			// the_issues += "<td class='label'>" + issues + "</td>"
-			// the_issues += "<td class='value'>" + d.issues.toLocaleString() + "</td>"
-			// the_issues += "<td></td>"
-			// the_issues += "</tr>"
+        	the_issues = ''
+			the_issues += "<tr>"
+			the_issues += "<td class='label'>" + issues + "</td>"
+			the_issues += "<td class='value'>" + d.issues.toLocaleString() + "</td>"
+			the_issues += "<td></td>"
+			the_issues += "</tr>"
 
 			the_images = ''
 			the_images += "<tr>"
@@ -798,7 +798,7 @@ function get_tooltip(dv) {
 				content += the_size
 				content += the_incipit
 				content += the_discussion
-				// content += the_issues
+				content += the_issues
 				content += the_images
 			}
 			// else if (dv == 'dv3'){

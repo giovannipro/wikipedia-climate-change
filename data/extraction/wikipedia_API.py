@@ -6,6 +6,26 @@ wikipedia_link = 'https://en.wikipedia.org/wiki/'
 wikipedia_api = "https://en.wikipedia.org/w/api.php"
 
 
+def get_wikipedia_issues(title):
+        
+    params = {
+        "action": "parse",
+        "page": title,
+        "prop": "templates",
+        "format": "json"
+    }
+
+    response = requests.get(wikipedia_api, params=params).json()
+    templates = response.get("parse", {}).get("templates", [])
+
+    issue_keywords = ['cleanup', 'unsourced', 'disputed', 'POV', 'issues', 'tone', 'orphan', 'rewrite']
+    issues = [tpl for tpl in templates if any(kw in tpl['*'].lower() for kw in issue_keywords)]
+    issue_count = len(issues)
+
+    # print(title, issue_count)
+
+    return issue_count
+
 def get_wikipedia_images(title):
 
     params = {
@@ -80,8 +100,11 @@ def read_csv_file(file_path):
     # if 'discussion_size' not in df.columns:
     #     df['discussion_size'] = None
 
-    if 'images' not in df.columns:
-        df['images'] = None
+    # if 'images' not in df.columns:
+    #     df['images'] = None
+
+    if 'issues' not in df.columns:
+        df['issues'] = None
     
     count = 0   
     for index, row in df.iterrows():
@@ -96,11 +119,15 @@ def read_csv_file(file_path):
             # df.loc[index, 'discussion_size'] = data
             # print (count, title, data)
 
-            data = get_wikipedia_images(title)
-            df.loc[index, 'images'] = data
+            # data = get_wikipedia_images(title)
+            # df.loc[index, 'images'] = data
+            # print (count, title, data)
+
+            data = get_wikipedia_issues(title)
+            df.loc[index, 'issues'] = data
             print (count, title, data)
             
-        result_df = df[['title', 'images']]
+        result_df = df[['title', 'issues']]
 
     result_df.to_csv(output_file, sep='\t', index=False)
 
