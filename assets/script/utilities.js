@@ -615,6 +615,9 @@ function format_data(data){
 		d.avg_pv_prev = +d.avg_pv_prev
 		d.issue_clarify = +d.issue_clarify
 		d.days = +d.days
+		d.edits = +d.edits
+		d.editors = +d.editors
+		d.edits_editors_ratio = d.edits / d.editors
 
 		if (d.references !== "-"){
 			d.references = +d.references
@@ -703,6 +706,8 @@ function get_tooltip(dv) {
 				issues = "avvisi"
 				images = "immagini"
 				incipit = 'incipit'
+				edits = 'modifiche'
+				editors = 'editori'
 
 				references = "riferimenti bibliog."
 				notes = "note"
@@ -715,6 +720,8 @@ function get_tooltip(dv) {
 				issues = "issues"
 				images = "images"
 				incipit = "lead section"
+				edits = 'edits'
+				editors = 'editors'
 
 				references = "references"
 				notes = "notes"
@@ -779,6 +786,20 @@ function get_tooltip(dv) {
 			the_images += "<td></td>"
 			the_images += "</tr>"
 
+			the_edits = ''
+			the_edits += "<tr>"
+			the_edits += "<td class='label'>" + edits + "</td>"
+			the_edits += "<td class='value'>" + d.edits.toLocaleString() + "</td>"
+			the_edits += "<td></td>"
+			the_edits += "</tr>"
+
+			the_editors = ''
+			the_editors += "<tr>"
+			the_editors += "<td class='label'>" + editors + "</td>"
+			the_editors += "<td class='value'>" + d.editors.toLocaleString() + "</td>"
+			the_editors += "<td></td>"
+			the_editors += "</tr>"
+
 			// the_references = ''
 			// the_references += "<tr>"
 			// the_references += "<td class='label'>" + references + "</td>"
@@ -800,6 +821,8 @@ function get_tooltip(dv) {
 				content += the_discussion
 				content += the_issues
 				content += the_images
+				content += the_edits
+				content += the_editors
 			}
 			// else if (dv == 'dv3'){
 			// 	content += avg_daily_visits

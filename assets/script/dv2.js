@@ -340,6 +340,14 @@ function dv2(the_sort) { // region, category,
 					return d.images;
 				})
 			}
+			else if (the_sort == 8){
+				min = d3.min(filtered_data, function(d) {
+					return d.edits_editors_ratio
+				})
+				max = d3.max(filtered_data, function(d) { 
+					return d.edits_editors_ratio
+				})
+			}
 			// console.log(min, max)
 
 			y_min = d3.min(filtered_data, function(d) { 
@@ -388,6 +396,9 @@ function dv2(the_sort) { // region, category,
 					else if (the_sort == 7){
 						direction = tooltip_direction(filtered_data,d.images,min,max,d.avg_pv, false)
 					}
+					else if (the_sort == 8){
+						direction = tooltip_direction(filtered_data,d.edits_editors_ratio,min,max,d.avg_pv, false)
+					}
 					// console.log(d.article, direction)
 					// let size = (r(Math.sqrt(d.size/3.14)) * 0.10) + 20
 
@@ -425,6 +436,9 @@ function dv2(the_sort) { // region, category,
 					}
 					else if (the_sort == 7){
 						direction = tooltip_direction(filtered_data,d.images,min,max,d.avg_pv, false)
+					}
+					else if (the_sort == 8){
+						direction = tooltip_direction(filtered_data,d.edits_editors_ratio,min,max,d.avg_pv, false)
 					}
 					return direction 
 				})
@@ -483,6 +497,9 @@ function dv2(the_sort) { // region, category,
 					}
 					else if (the_sort == 7){
 						x_position = x(d.images)
+					}
+					else if (the_sort == 8){
+						x_position = x(d.edits_editors_ratio)
 					}
 					else { // the_sort === undefined
 						x_position = x(i)
@@ -660,6 +677,14 @@ function dv2(the_sort) { // region, category,
 						return d.images;
 					})
 				}
+				else if (the_sort == 8){
+					min = d3.min(filtered_data, function(d) { 
+						return d.edits_editors_ratio
+					})
+					max = d3.max(filtered_data, function(d) { 
+						return d.edits_editors_ratio
+					})
+				}
 
 				if (the_sort == 2){
 					x = d3.scaleLinear()
@@ -714,6 +739,9 @@ function dv2(the_sort) { // region, category,
 						else if (the_sort == 7){
 							x_position = x(d.images)
 						}
+						else if (the_sort == 8){
+							x_position = x(d.edits_editors_ratio)
+						}
 						else { // the_sort === undefined
 							x_position = x(i)
 						}
@@ -745,6 +773,9 @@ function dv2(the_sort) { // region, category,
 						}
 						else if (the_sort == 7){
 							direction = tooltip_direction(filtered_data,d.images,min,max,d.avg_pv, false)
+						}
+						else if (the_sort == 8){
+							direction = tooltip_direction(filtered_data,d.edits_editors_ratio,min,max,d.avg_pv, false)
 						}
 						return direction 
 					})
@@ -994,6 +1025,9 @@ function dv2(the_sort) { // region, category,
 					}
 					else if (the_sort == 6){
 						x_position = x(d.issues)
+					}
+					else if (the_sort == 7){
+						x_position = x(d.images)
 					}
 					else if (the_sort == 7){
 						x_position = x(d.images)
