@@ -314,17 +314,18 @@ function sidebar(dv,data,the_sort){
 				// 	categoryColors[d.id] || categoryColors.default
 				// })
 
-			// let discussion = article_box
-			// 	.append("circle")
-			// 	.attr("cx", box_size/2)
-			// 	.attr("cy", box_size/2)
-			// 	.attr("r", r(Math.sqrt(individual_data.discussion_size/3.14)) )
-			// 	.attr("stroke", function(d,i){
-			// 		return "#00b2ff"
-			// 	})
-			// 	.attr("opacity",0.9)
-			// 	.attr("fill","transparent")
-			// 	.attr("stroke-width",0.5)
+			let discussion = article_box
+				.append("circle")
+				.attr("cx", box_size/2)
+				.attr("cy", box_size/2)
+				.attr("r", r(Math.sqrt(individual_data.discussion_size/3.14)) )
+				.attr("stroke", d => categoryColors[individual_data.instance_of] || categoryColors.default)
+				.attr("opacity",0.9)
+				.attr("fill","transparent")
+				.attr("stroke-width",0.5)
+				// .attr("stroke", function(d,i){
+				// 	return "#00b2ff"
+				// })
 		}
 	}
 	load_sidebar()

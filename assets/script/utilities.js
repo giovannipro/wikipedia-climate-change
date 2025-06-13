@@ -712,7 +712,7 @@ function get_tooltip(dv) {
 
 			let the_instance = ""
 			if (d.instance != ""){
-				the_instance =  "<span>instance: " + d.instance + "</span><br>" 
+				the_instance =  "<span>instance: " + d.instance_of + "</span><br>" 
 			}
 
 			// content += "<p style='color: red; margin: 0;'>" + i + "</p>" // debug  
@@ -746,12 +746,12 @@ function get_tooltip(dv) {
 			the_incipit += "<td></td>"
 			the_incipit += "</tr>"
 
-        	// the_discussion = ''
-			// the_discussion += "<tr>"
-			// the_discussion += "<td class='label'>" + discussion + "<span style='color: #b9b9b9;'> (byte)</span></td>"
-			// the_discussion += "<td class='value'>" + d.discussion_size.toLocaleString() + "</td>"
-			// the_discussion += "<td></td>"
-			// the_discussion += "</tr>"
+        	the_discussion = ''
+			the_discussion += "<tr>"
+			the_discussion += "<td class='label'>" + discussion + "<span style='color: #b9b9b9;'> (byte)</span></td>"
+			the_discussion += "<td class='value'>" + d.discussion_size.toLocaleString() + "</td>"
+			the_discussion += "<td></td>"
+			the_discussion += "</tr>"
 
         	// the_issues = ''
 			// the_issues += "<tr>"
@@ -785,7 +785,7 @@ function get_tooltip(dv) {
 				content += avg_daily_visits
 				content += the_size
 				content += the_incipit
-				// content += the_discussion
+				content += the_discussion
 				// content += the_issues
 				// content += the_images
 			}

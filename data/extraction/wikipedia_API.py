@@ -22,7 +22,7 @@ def get_wikipedia_talkPage(title):
 
     if revisions:
         content = revisions[0].get("*", "") or revisions[0].get("slots", {}).get("main", {}).get("*", "")
-        size = len(content)
+        size = int(len(content))
     else:
         print(title +  '\t' + "No content found")
         size = 0
@@ -56,8 +56,11 @@ def read_csv_file(file_path):
 
     df = pd.read_csv(input_file, delimiter='\t')
     
-    if 'incipit_size' not in df.columns:
-        df['incipit_size'] = None
+    # if 'incipit_size' not in df.columns:
+    #     df['incipit_size'] = None
+
+    if 'discussion_size' not in df.columns:
+        df['discussion_size'] = None
     
     count = 0   
     for index, row in df.iterrows():
@@ -65,11 +68,14 @@ def read_csv_file(file_path):
         if count > 0 and count < 10000:
             title = row['title']
 
-            data = get_wikipedia_extract(title)[0]
-            df.loc[index, 'incipit_size'] = data
+            # data = get_wikipedia_extract(title)[0]
+            # df.loc[index, 'incipit_size'] = data
+
+            data = get_wikipedia_talkPage('Talk:' + title)
+            df.loc[index, 'discussion_size'] = data
             print (count, title, data)
             
-        result_df = df[['title', 'incipit_size']]
+        result_df = df[['title', 'discussion_size']]
 
     result_df.to_csv(output_file, sep='\t', index=False)
 

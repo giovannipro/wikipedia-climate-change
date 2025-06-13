@@ -188,8 +188,8 @@ function dv2(the_sort) { // region, category,
 
 		// remove categoris with count < 2
 		const counts = filtered_data.reduce((acc, d) => {
-		acc[d.instance] = (acc[d.instance_of] || 0) + 1;
-		return acc;
+			acc[d.instance_of] = (acc[d.instance_of] || 0) + 1;
+			return acc;
 		}, {});
 
 		// const sortedCategories = Object.entries(counts)
@@ -205,6 +205,7 @@ function dv2(the_sort) { // region, category,
 				// Then sort alphabetically ascending
 				return a[0].localeCompare(b[0]);
 		});
+		// console.log(sortedCategories)
 
 		// the_instances = instances.sort((a, b) => a.article.localeCompare(b.article));
 		
@@ -239,13 +240,14 @@ function dv2(the_sort) { // region, category,
 			}
 			else {
 				filtered_data = the_data.filter(item =>
-					item.instance_of == instance_of
+					item.instance_of == instance
 					&&
 					item.avg_pv > limit_y_min
 					&&
 					item.avg_pv  < limit_y_max
 				)
 			}
+			// console.log(filtered_data)
 
 			// if (region == 'all'){
 			// 	// region_data = data 
@@ -568,9 +570,10 @@ function dv2(the_sort) { // region, category,
 				})
 				.attr("cx",0)
 				.attr("cy",0)
-				.attr("stroke", function(d,i){
-					return "#00b2ff"
-				})
+				// .attr("stroke", function(d,i){
+				// 	return "#00b2ff"
+				// })
+				.attr("stroke", d => categoryColors[d.instance_of] || categoryColors.default)
 				.attr("fill","transparent")
 				.attr("stroke-width",0.5)
 				.attr("opacity",0.9)
