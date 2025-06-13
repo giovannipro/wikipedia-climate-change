@@ -6,6 +6,24 @@ wikipedia_link = 'https://en.wikipedia.org/wiki/'
 wikipedia_api = "https://en.wikipedia.org/w/api.php"
 
 
+def get_wikipedia_images(title):
+
+    params = {
+        "action": "query",
+        "titles": title,
+        "prop": "images",
+        "imlimit": "max",  # gets up to 500 images
+        "format": "json"
+    }
+
+    response = requests.get(wikipedia_api, params=params).json()
+    page = next(iter(response["query"]["pages"].values()))
+    images = page.get("images", [])
+
+    # Filter only actual image files (optional)
+    image_count = sum(1 for img in images if img['title'].lower().endswith(('.jpg', '.jpeg', '.png', '.gif', '.svg')))
+    return image_count
+
 def get_wikipedia_talkPage(title):
 
     params = {
@@ -59,8 +77,11 @@ def read_csv_file(file_path):
     # if 'incipit_size' not in df.columns:
     #     df['incipit_size'] = None
 
-    if 'discussion_size' not in df.columns:
-        df['discussion_size'] = None
+    # if 'discussion_size' not in df.columns:
+    #     df['discussion_size'] = None
+
+    if 'images' not in df.columns:
+        df['images'] = None
     
     count = 0   
     for index, row in df.iterrows():
@@ -71,11 +92,15 @@ def read_csv_file(file_path):
             # data = get_wikipedia_extract(title)[0]
             # df.loc[index, 'incipit_size'] = data
 
-            data = get_wikipedia_talkPage('Talk:' + title)
-            df.loc[index, 'discussion_size'] = data
+            # data = get_wikipedia_talkPage('Talk:' + title)
+            # df.loc[index, 'discussion_size'] = data
+            # print (count, title, data)
+
+            data = get_wikipedia_images(title)
+            df.loc[index, 'images'] = data
             print (count, title, data)
             
-        result_df = df[['title', 'discussion_size']]
+        result_df = df[['title', 'images']]
 
     result_df.to_csv(output_file, sep='\t', index=False)
 

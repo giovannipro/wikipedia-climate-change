@@ -10,7 +10,7 @@ const categoryColors = {
 	"Wikimedia list article": "#B2E0D2",
 	"climate change by country or territory": "#efbc15",
 	"film": "#FDC6B0",
-	"literary work": "red",
+	"literary work": "#ff7147",
 	"business": "blue",
 	"industry": "orange",
 	"nonprofit organization": "#eacd40",
@@ -18,8 +18,10 @@ const categoryColors = {
 	"academic discipline":"lightgreen",
 	"organization":"lightcoral",
 	"taxon":"lightpink",
+	"treaty":"#c8b0e9",
+	"United Nations Climagte Change Conference": "#32b732",
 	"": "#ccc",
-	"default": "#7f7f7f"
+	"default": "#adacac"
 };
 
 function formatNumber(num) {
@@ -770,12 +772,12 @@ function get_tooltip(dv) {
 			// the_issues += "<td></td>"
 			// the_issues += "</tr>"
 
-			// the_images = ''
-			// the_images += "<tr>"
-			// the_images += "<td class='label'>" + images + "</td>"
-			// the_images += "<td class='value'>" + d.images.toLocaleString() + "</td>"
-			// the_images += "<td></td>"
-			// the_images += "</tr>"
+			the_images = ''
+			the_images += "<tr>"
+			the_images += "<td class='label'>" + images + "</td>"
+			the_images += "<td class='value'>" + d.images.toLocaleString() + "</td>"
+			the_images += "<td></td>"
+			the_images += "</tr>"
 
 			// the_references = ''
 			// the_references += "<tr>"
@@ -797,7 +799,7 @@ function get_tooltip(dv) {
 				content += the_incipit
 				content += the_discussion
 				// content += the_issues
-				// content += the_images
+				content += the_images
 			}
 			// else if (dv == 'dv3'){
 			// 	content += avg_daily_visits
