@@ -116,10 +116,12 @@ function dv2(the_sort) { // region, category,
 			.attr("transform","translate(7," + height + ")")
 
 		let yaxis_label = yaxis_label_box.append("text")
-			.attr("class","axis_name")
-			.text("visite giornaliere (media)")
+			.attr("class","lang_switch") // axis_name
+			// .text("visite giornaliere (media)")
+			.text("daily visits (average)")
 			.attr("data-it","visite giornaliere (media)")
 			.attr("data-en","daily visits (average)")
+			.attr("id","yaxis_label")
 			.attr("y", -18)
 			.attr("font-size",font_size)
 

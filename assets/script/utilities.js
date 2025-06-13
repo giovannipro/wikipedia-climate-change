@@ -361,10 +361,6 @@ function get_statistics(){
 	})
 }
 
-function switch_the_language(){
-	
-}
-
 function language() {
 	const lang_button = document.getElementById("language");
 	const lang_button_mobile = document.getElementById("language_mobile");
@@ -433,6 +429,13 @@ function language() {
 
 				content.textContent = en
 			})
+
+				// axis label
+			if (document.getElementById('yaxis_label')){
+				const yaxis_label = document.getElementById('yaxis_label')
+				yaxis_label_it = yaxis_label.dataset.it
+				yaxis_label.innerHTML = yaxis_label_it;
+			}
 		} 
 		else {
 			
@@ -458,6 +461,13 @@ function language() {
 
 				content.textContent = it
 			})
+
+			// axis label
+			if (document.getElementById('yaxis_label')){
+				const yaxis_label = document.getElementById('yaxis_label')
+				yaxis_label_en = yaxis_label.dataset.en
+				yaxis_label.innerHTML = yaxis_label_en;
+			}
 		}
 
 		// url parameter
