@@ -653,9 +653,9 @@ function statistics(data){
 	data.forEach(obj => sum_size += obj.size);
 	const avg_size_articles = Math.floor(sum_size / analized_articles)
 
-	analized_articles_box.innerHTML = analized_articles
+	analized_articles_box.innerHTML = formatNumber(analized_articles)
 	avg_pv_articles_box.innerHTML = avg_pv_articles
-	avg_size_articles_box.innerHTML = avg_size_articles
+	avg_size_articles_box.innerHTML = formatNumber(avg_size_articles)
 
 	// function load_values(value){
 
