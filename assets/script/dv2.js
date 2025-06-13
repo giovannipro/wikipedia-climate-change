@@ -40,7 +40,7 @@ function dv2(the_sort) { // region, category,
 		.then(loaded)
 
 	function loaded(data) {
-		// console.log(data,region,the_sort)
+		console.log(data)
 
 		data = format_data(data)
 		filtered_data = data
@@ -188,7 +188,7 @@ function dv2(the_sort) { // region, category,
 
 		// remove categoris with count < 2
 		const counts = filtered_data.reduce((acc, d) => {
-		acc[d.instance] = (acc[d.instance] || 0) + 1;
+		acc[d.instance] = (acc[d.instance_of] || 0) + 1;
 		return acc;
 		}, {});
 
@@ -239,7 +239,7 @@ function dv2(the_sort) { // region, category,
 			}
 			else {
 				filtered_data = the_data.filter(item =>
-					item.instance == instance
+					item.instance_of == instance_of
 					&&
 					item.avg_pv > limit_y_min
 					&&
@@ -506,24 +506,6 @@ function dv2(the_sort) { // region, category,
 				.attr("target","_blank")
 
 			// const color = d3.scaleOrdinal(d3.schemePaired);
-			const categoryColors = {
-				"human": "#e41a1c",
-				"aspect in a geographic region": "#377eb8",
-				"climate of geographic location": "#4daf4a",
-				"Wikimedia list article": "#B2E0D2",
-				"climate change by country or territory": "#F2E1C9",
-				"film": "#FDC6B0",
-				"literary work": "red",
-				"business": "blue",
-				"industry": "orange",
-				"nonprofit organization": "#eacd40",
-				"environmental effects":"violet",
-				"academic discipline":"lightgreen",
-				"organization":"lightcoral",
-				"taxon":"lightpink",
-				"": "#ccc",
-				"default": "#7f7f7f"
-			};
 			// const getColor = instance => categoryColors[instance] || "#d5d5d5";
 
 			// console.log([...new Set(data.map(d => d.instance))]);
@@ -540,7 +522,7 @@ function dv2(the_sort) { // region, category,
 				// 	console.log(d.instance, getColor(d.instance))
 				// 	return getColor(d.instance)
 				// })
-				.attr("fill", d => categoryColors[d.instance] || categoryColors.default)
+				.attr("fill", d => categoryColors[d.instance_of] || categoryColors.default)
 				// .attr("fill", d => color(d.instance))
 				
 				// .attr("fill", function(d,i){
@@ -566,9 +548,10 @@ function dv2(the_sort) { // region, category,
 				})
 				.attr("cx",0)
 				.attr("cy",0)
-				.attr("fill", function(d,i){
-					return "#00b2ff"
-				})
+				// .attr("fill", function(d,i){
+				// 	return "#00b2ff"
+				// })
+				.attr("fill", d => categoryColors[d.instance_of] || categoryColors.default)
 				.attr("opacity",0.5)
 				.attr("r", function(d,i){
 					return r(Math.sqrt(d.incipit_size/3.14))
@@ -867,13 +850,16 @@ function dv2(the_sort) { // region, category,
 					const min_pageviews = document.getElementById("min_pageviews")
 					const max_pageviews = document.getElementById("max_pageviews")
 					const the_instance = document.getElementById("filter_instance")
-	
+					const sort_box = document.getElementById('sort_article')
+					
+					let new_sort = sort_box.value;
+
 					const new_limit_y_min = parseInt(min_pageviews.value)
 					const new_limit_y_max = parseInt(max_pageviews.value)
 					const instance = the_instance.value
 
 					// console.log(instance, new_limit_y_min, new_limit_y_max)
-					display_data(instance, the_sort, new_limit_y_min, new_limit_y_max)
+					display_data(instance, new_sort, new_limit_y_min, new_limit_y_max)
 				}
 
 				// document.onkeydown = function (e) {

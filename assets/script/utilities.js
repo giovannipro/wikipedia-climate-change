@@ -3,6 +3,25 @@ let footer_it;
 let footer_en;
 let footer = document.getElementById('footer');
 
+const categoryColors = {
+	"human": "#e41a1c",
+	"aspect in a geographic region": "#377eb8",
+	"climate of geographic location": "#4daf4a",
+	"Wikimedia list article": "#B2E0D2",
+	"climate change by country or territory": "#F2E1C9",
+	"film": "#FDC6B0",
+	"literary work": "red",
+	"business": "blue",
+	"industry": "orange",
+	"nonprofit organization": "#eacd40",
+	"environmental effects":"violet",
+	"academic discipline":"lightgreen",
+	"organization":"lightcoral",
+	"taxon":"lightpink",
+	"": "#ccc",
+	"default": "#7f7f7f"
+};
+
 function formatNumber(num) {
 	return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
 }
@@ -720,12 +739,12 @@ function get_tooltip(dv) {
 			the_size += "<td></td>"
 			the_size += "</tr>"
 
-        	// the_incipit = ''
-			// the_incipit += "<tr>"
-			// the_incipit += "<td class='label'>" + incipit + "<span style='color: #b9b9b9;'> (byte)</span></td>"
-			// the_incipit += "<td class='value'>" + d.incipit_size.toLocaleString() + "</td>"
-			// the_incipit += "<td></td>"
-			// the_incipit += "</tr>"
+        	the_incipit = ''
+			the_incipit += "<tr>"
+			the_incipit += "<td class='label'>" + incipit + "<span style='color: #b9b9b9;'> (byte)</span></td>"
+			the_incipit += "<td class='value'>" + d.incipit_size.toLocaleString() + "</td>"
+			the_incipit += "<td></td>"
+			the_incipit += "</tr>"
 
         	// the_discussion = ''
 			// the_discussion += "<tr>"
@@ -765,7 +784,7 @@ function get_tooltip(dv) {
 			if (dv == 'dv2') {
 				content += avg_daily_visits
 				content += the_size
-				// content += the_incipit
+				content += the_incipit
 				// content += the_discussion
 				// content += the_issues
 				// content += the_images

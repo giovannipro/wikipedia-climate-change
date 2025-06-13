@@ -249,7 +249,8 @@ function sidebar(dv,data,the_sort){
 			let container = '_' + d.id // id_wikidata
 
 			// let max_size = Math.max(...data.map((a,b) => a.size))
-			make_article_bubble(container,d)
+			instance = d.instance_of || "" 
+			make_article_bubble(container,d,instance)
 
 		})
 
@@ -260,12 +261,13 @@ function sidebar(dv,data,the_sort){
 		// add bubbles
 		data.forEach(function (d,i) {
 			let container = '_' + d.id
-			make_article_bubble(container,d)
+			const instance = d.instance_of || ""
+			make_article_bubble(container,d,instance)
 		})
 
 		
-		function make_article_bubble(container,individual_data){
-			// console.log(max_size)	
+		function make_article_bubble(container, individual_data, instance){
+			// console.log(individual_data)	
 			
 			const box_size = 40
 			const max_article_size = 393000
@@ -284,26 +286,33 @@ function sidebar(dv,data,the_sort){
 
 			let article_box = svg.append("g")
 
-			// article circle
+			// article
 			let article = article_box
 				.append("circle")
 				.attr("cx", box_size/2)
 				.attr("cy", box_size/2)
 				.attr("r", r(Math.sqrt(individual_data.size/3.14)) )
-				.attr("fill", function(d,i){
-					return "#00b2ff"
-				})
+				.attr("fill", d => categoryColors[individual_data.instance_of] || categoryColors.default)
 				.attr("opacity",0.5)
+				// .attr("fill", function(a){
+				// 	console.log(instance)
+				// 	return "#00b2ff"
+				// })
 
-			// let incipit = article_box
-			// 	.append("circle")
-			// 	.attr("cx", box_size/2)
-			// 	.attr("cy", box_size/2)
-			// 	.attr("r", r(Math.sqrt(individual_data.incipit_size/3.14)) )
-			// 	.attr("fill", function(d,i){
-			// 		return "#00b2ff"
-			// 	})
-			// 	.attr("opacity",0.5)
+			let incipit = article_box
+				.append("circle")
+				.attr("cx", box_size/2)
+				.attr("cy", box_size/2)
+				.attr("r", r(Math.sqrt(individual_data.incipit_size/3.14)) )
+				.attr("fill", d => categoryColors[individual_data.instance_of] || categoryColors.default)
+				.attr("opacity",0.5)
+				// .attr("fill", function(d,i){
+				// 	return "#00b2ff"
+				// })
+				// .attr("fill", d => {
+				// 	console.log(d)
+				// 	categoryColors[d.id] || categoryColors.default
+				// })
 
 			// let discussion = article_box
 			// 	.append("circle")
