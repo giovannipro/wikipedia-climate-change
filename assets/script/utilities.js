@@ -708,6 +708,7 @@ function get_tooltip(dv) {
 				incipit = 'incipit'
 				edits = 'modifiche'
 				editors = 'editori'
+				restrictions = 'restrizioni'
 
 				references = "riferimenti bibliog."
 				notes = "note"
@@ -722,6 +723,7 @@ function get_tooltip(dv) {
 				incipit = "lead section"
 				edits = 'edits'
 				editors = 'editors'
+				restrictions = 'restrictions'
 
 				references = "references"
 				notes = "notes"
@@ -739,6 +741,10 @@ function get_tooltip(dv) {
             content += "<p style='margin: 0 0 .8rem .2rem;'>"
 			content += the_instance
             content += "<span>" + creation_date + d.first_edit.slice(0,10) + "</span></p>" // format_date(d.first_edit) 
+
+			if (d.restrictions != ""){
+				content += "<p style='margin: 0 0 .8rem .2rem;'>" + restrictions + ": " + d.restrictions + "</p>"
+			}
 
             content += '<hr style="border: 0.5px solid #e3e3e3"/>'
 
@@ -823,14 +829,19 @@ function get_tooltip(dv) {
 
 			if (dv == 'dv2') {
 				content += avg_daily_visits
+				content += the_edits
+				content += the_editors
+				content += the_editors_ratio
+
+				content += '</table>'
+				content += '<hr style="border: 0.5px solid #e3e3e3"/>'
+				content += '<table>'
+
 				content += the_size
 				content += the_incipit
 				content += the_discussion
 				content += the_issues
 				content += the_images
-				content += the_edits
-				content += the_editors
-				content += the_editors_ratio
 			}
 			// else if (dv == 'dv3'){
 			// 	content += avg_daily_visits

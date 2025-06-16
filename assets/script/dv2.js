@@ -539,16 +539,7 @@ function dv2(the_sort) { // region, category,
 				})
 				.attr("cx",0)
 				.attr("cy",0)	
-				// .attr("fill", d => {
-				// 	console.log(d.instance, getColor(d.instance))
-				// 	return getColor(d.instance)
-				// })
 				.attr("fill", d => categoryColors[d.instance_of] || categoryColors.default)
-				// .attr("fill", d => color(d.instance))
-				
-				// .attr("fill", function(d,i){
-				// 	return "#00b2ff"
-				// })
 				.attr("opacity",0.5)
 				.attr("r",0)
 				.transition()
@@ -560,6 +551,15 @@ function dv2(the_sort) { // region, category,
 				.attr("data-size", function(d,i){
 					return d.size
 				})
+				// .attr("fill", d => {
+				// 	console.log(d.instance, getColor(d.instance))
+				// 	return getColor(d.instance)
+				// })
+				// .attr("fill", d => color(d.instance))
+				
+				// .attr("fill", function(d,i){
+				// 	return "#00b2ff"
+				// })
 
 			let incipit = article_circles.append("circle")
 				.transition()
@@ -598,7 +598,7 @@ function dv2(the_sort) { // region, category,
 				.attr("opacity",0.9)
 				.attr("r",0)
 				.transition()
-				.delay(500)
+				.delay(1000)
 				.ease(d3.easeLinear)
 				.duration(500) 
 				.attr("r", function(d,i){
@@ -607,6 +607,74 @@ function dv2(the_sort) { // region, category,
 				.attr("data-discussion", function(d,i){
 					return d.discussion_size
 				})
+
+			// restrictions
+			const padlock_width = 6
+			const padlock_animation = 1000
+			let padlock = article_circles.append('g')
+				.attr('transform', function(d,i){
+					const x = r(Math.sqrt(d.size/3.14)) + 5 + (padlock_width/2)
+					return "translate(" + x + "," + 0 + ")"
+				})
+				
+			let padlock_a = padlock.append("circle")
+				.transition()
+				.duration(500)
+				.delay(function(d,i){ 
+					return i * 2 + padlock_animation
+				})
+				.ease(d3.easeLinear)
+				.duration(padlock_animation) 
+				.attr('stroke-width',1)
+				.attr("r",0)
+				// .transition()
+				// .delay(500)
+				.attr("fill", "transparent")
+				.attr("stroke", function (d){
+					if (d.restrictions != ''){
+						return "gray"
+					}
+					else {
+						return "transparent"
+					}
+				})
+				.attr("r",padlock_width/2 - 1)
+			
+			let padlock_b = padlock.append("rect")
+				.transition()
+				.duration(500)
+				.delay(function(d,i){ 
+					return i * 2 +  padlock_animation
+				})
+				.ease(d3.easeLinear)
+				.duration(padlock_animation) 
+				.attr("width",0)
+				.attr("height",0)
+				.attr('x',-padlock_width/2)
+				.attr('y',0)
+				.attr("stroke", function (d){
+					if (d.restrictions != ''){
+						return "gray"
+					}
+					else {
+						return "transparent"
+					}
+				})
+				.attr("fill", function (d){
+					if (d.restrictions != ''){
+						return "white"
+					}
+					else {
+						return "transparent"
+					}
+				})
+				// .transition()
+				// .delay(1000)
+				// .ease(d3.easeLinear)
+				// .duration(padlock_animation) 
+				.attr("width",padlock_width)
+				.attr("height",padlock_width/5*4)
+			
 
 			sidebar(2,filtered_data,the_sort)
 
