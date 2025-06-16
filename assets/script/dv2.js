@@ -610,7 +610,7 @@ function dv2(the_sort) { // region, category,
 
 			// restrictions
 			const padlock_width = 6
-			const padlock_animation = 1000
+			const padlock_animation = 500
 			let padlock = article_circles.append('g')
 				.attr('transform', function(d,i){
 					const x = r(Math.sqrt(d.size/3.14)) + 5 + (padlock_width/2)

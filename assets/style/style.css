@@ -746,7 +746,7 @@ footer ul li {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   font-size: 0.8em;
   font-weight: normal;
-  max-width: 180px;
+  max-width: 200px;
   white-space: normal;
   word-wrap: break-word;
   padding: 6px 0;
@@ -756,7 +756,7 @@ footer ul li {
   padding: 0 6px;
 }
 .tooltip table {
-  width: 168px;
+  width: 188px;
   margin: 0 6px;
 }
 .tooltip table td {

@@ -700,6 +700,9 @@ function get_tooltip(dv) {
 			// lang = 'it'
 			if (lang == 'it'){
 				creation_date = "Voce creata il: "
+				restrictions = 'Restrizioni'
+				instance_of = 'Istanza di'
+
 				visits = "visite giornaliere"
 				size = "dimensioni"
 				discussion = "discussione"
@@ -708,13 +711,15 @@ function get_tooltip(dv) {
 				incipit = 'incipit'
 				edits = 'modifiche'
 				editors = 'editori'
-				restrictions = 'restrizioni'
 
 				references = "riferimenti bibliog."
 				notes = "note"
 			}
 			else {
 				creation_date = "Created on: "
+				restrictions = 'Restrictions'
+				instance_of = 'Instance of'
+
 				visits = "daily visits"
 				size = "size"
 				discussion = "discussion"
@@ -723,7 +728,6 @@ function get_tooltip(dv) {
 				incipit = "lead section"
 				edits = 'edits'
 				editors = 'editors'
-				restrictions = 'restrictions'
 
 				references = "references"
 				notes = "notes"
@@ -733,18 +737,20 @@ function get_tooltip(dv) {
 
 			let the_instance = ""
 			if (d.instance != ""){
-				the_instance =  "<span>instance: " + d.instance_of + "</span><br>" 
+				the_instance =  "<span>" + instance_of + ": " + d.instance_of + "</span><br>"
 			}
 
 			// content += "<p style='color: red; margin: 0;'>" + i + "</p>" // debug  
 			content += "<p style='font-weight: bold; margin: 0 0 .4rem .2rem;'>" + d.article + "</p>";
             content += "<p style='margin: 0 0 .8rem .2rem;'>"
 			content += the_instance
-            content += "<span>" + creation_date + d.first_edit.slice(0,10) + "</span></p>" // format_date(d.first_edit) 
+            content += "<span>" + creation_date + d.first_edit.slice(0,10) + "</span>" // format_date(d.first_edit) 
 
 			if (d.restrictions != ""){
-				content += "<p style='margin: 0 0 .8rem .2rem;'>" + restrictions + ": " + d.restrictions + "</p>"
+				content += "<br/><span>" + restrictions + ": " + d.restrictions + "</span>"
 			}
+
+			content += '</p>'
 
             content += '<hr style="border: 0.5px solid #e3e3e3"/>'
 
