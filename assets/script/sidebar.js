@@ -10,6 +10,89 @@ const max_circle_size = 35;
 // 	console.log(sort, sort_option)
 // }
 
+function load_edits(){
+	d3.json("assets/data/revisions.json")
+		.then(edits_loaded)
+
+	function edits_loaded(edits_data){
+		console.log(edits_data.length)
+
+		const electrocardiograms = document.getElementsByClassName('electrocardiogram');
+		for (chart of electrocardiograms){
+			
+			the_data = edits_data.filter(item => item.wikidata_id === chart.id.replace('revision_',''))
+
+			if (the_data.length > 0){
+				// console.log(the_data.length)
+
+				const container = 'revision_' + the_data[0].wikidata_id
+				// console.log(container)
+	
+				width = document.getElementById(container).offsetWidth
+				height = document.getElementById(container).offsetHeight
+
+				// const revisions_data = the_data[0].revisions
+				// console.log(the_data[0].wikidata_id)
+
+				const svg = d3.select('#' + container)
+					.append("svg")
+					.attr("width", width)
+					.attr("height", height)
+
+
+				let plot = svg.append("g")
+					.attr("class", "d3_plot")
+
+				const revisions_data = the_data[0].revisions
+
+				const parsedRevisions = revisions_data.map(d => ({
+					date: new Date(d.timestamp),
+					size: d.size
+				}));
+				// console.log(parsedRevisions)
+
+				const x = d3.scaleTime()
+					// .domain(d3.extent(parsedRevisions, d => d.date))
+					.domain([
+						new Date("2001-01-15"), // Start from Jan 1, 2000
+						new Date("2025-12-31"),
+						// d3.max(parsedRevisions, d => d.date) // Automatically calculate the latest date
+					])
+
+					.range([0, width]);
+
+				const y = d3.scaleLinear()
+					.domain([0, d3.max(parsedRevisions, d => d.size)])
+					.range([height, 0]);
+
+				const line = d3.line()
+					.x(d => x(d.date))
+					.y(d => y(d.size))
+					.curve(d3.curveStepAfter)
+
+				plot.append("g")
+					.attr("transform", `translate(0,16)`)
+					.call(d3.axisTop(x));
+
+				plot.append("path")
+					.datum(parsedRevisions)
+					.attr("class", "line")
+					.attr("d", line)
+					
+			}
+
+		}
+	}
+}
+
+document.addEventListener("keypress", (event) => {
+
+	if (event.key == 'e' || event.key == 'E'){
+		load_edits()
+	}
+})
+
+
 function sidebar(dv,data,the_sort){
 	// console.log(dv, the_sort)
 
@@ -153,6 +236,7 @@ function sidebar(dv,data,the_sort){
 
 		// add item in the sidebar
 		data.forEach(function (d,i) {
+			article_id = i + 1
 			// console.log(d.article)
 
 			if (dv == 1){
@@ -256,18 +340,28 @@ function sidebar(dv,data,the_sort){
 			
 			output += '<div class="item_bubble" id="_' + d.id + '"></div>'
 
-			output += '<div class="item_value">'
-			output += '<div class="item_list">'
+			output += '<div class="item_value" data-wikidataId="' + d.wikidata_id + '">'
+			output += '<div class="item_list" style="display: flex; align-items: center;">'
 
 			// console.log(d.article_wikipedia)
-			if (d.article_wikipedia != "Voce non esistente"){
+
+			if (the_sort == 1){
 				output += '<div class="article_list" data-id="_' + d.id + '">' + d.article + '</div>'
+				output += '<div class="electrocardiogram" style="height: 50px; width: 60%; opacity: 1" id="revision_' + d.wikidata_id + '"></div>'
 			}
 			else {
-				output += '<div class="article_list" data-id="_' + d.id + '">' + d.article + ' <br/><span style="color: #f57e7e;">(voce non esistente)</span></div>'
+				output += '<div class="article_list" data-id="_' + d.id + '">' + d.article + '</div>'
 			}
-			
 
+			// if (d.article_wikipedia != "Voce non esistente"){
+			// 	output += '<div class="article_list" data-id="_' + d.id + '">' + d.article + '</div>'
+			// 	output += '<div>aaa</div>'
+			// }
+			// else {
+			// 	output += '<div class="article_list" data-id="_' + d.id + '">' + d.article + ' <br/><span style="color: #f57e7e;">(voce non esistente)</span></div>'
+			// 	output += '<div>aaa</div>'
+			// }
+		
 			// output += '<div class="article_region">' + d.region + '</div>'
 		
 			if (isNaN(max) == false || max < 0) {
@@ -304,7 +398,6 @@ function sidebar(dv,data,the_sort){
 			make_article_bubble(container,d,instance)
 		})
 
-		
 		function make_article_bubble(container, individual_data, instance){
 			// console.log(individual_data)	
 			

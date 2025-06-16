@@ -214,13 +214,16 @@ def read_csv_file(file_path):
     # if 'restrictions' not in df.columns:
     #     df['restrictions'] = None
 
-    if 'linguistic_versions' not in df.columns:
-        df['linguistic_versions'] = None
+    # if 'linguistic_versions' not in df.columns:
+    #     df['linguistic_versions'] = None
+
+    if 'revisions' not in df.columns:
+        df['revisions'] = None
     
     count = 0   
     for index, row in df.iterrows():
         count += 1
-        if count > 0 and count < 100000:
+        if count > 0 and count < 10:
             title = row['title']
 
             # data = get_wikipedia_extract(title)[0]
@@ -249,12 +252,12 @@ def read_csv_file(file_path):
             linguistic_versions = data + 1 # +1 for the English version itself
             print(count, title, linguistic_versions)
 
-            df.loc[index, 'linguistic_versions'] = linguistic_versions 
-            result_df = df[['title', 'linguistic_versions']]
+            df.loc[index, 'revisions'] = data
+            result_df = df[['title', 'revisions']]
 
     result_df.to_csv(output_file, sep='\t', index=False)
 
-    print('done')
+    # print('done')
 
 
 # -----------------------
