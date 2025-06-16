@@ -92,7 +92,7 @@ function sidebar(dv,data,the_sort){
 				})
 				max = Math.max(...data.map((a,b) => a.incipit_size))
 
-				sort_.innerHTML = 'incipit size'
+				sort_.innerHTML = 'lead section size'
 			}
 			else if (the_sort == 6){
 				data.sort((a, b) => {
