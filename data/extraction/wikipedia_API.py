@@ -246,10 +246,10 @@ def read_csv_file(file_path):
             # print(count, title, restrictions)
 
             data = get_linguistic_versions(title)
-            linguistic_versions = data
+            linguistic_versions = data + 1 # +1 for the English version itself
             print(count, title, linguistic_versions)
 
-            df.loc[index, 'linguistic_versions'] = linguistic_versions
+            df.loc[index, 'linguistic_versions'] = linguistic_versions 
             result_df = df[['title', 'linguistic_versions']]
 
     result_df.to_csv(output_file, sep='\t', index=False)

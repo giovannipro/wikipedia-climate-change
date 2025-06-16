@@ -1,14 +1,14 @@
 const min_circle_size = 0.5;
 const max_circle_size = 35;
 
-function update_sidebar_text(){
-	// const sort_option = document.getElementById('sort_article');
-	// const text_box = document.getElementById('sidebar_text');
+// function update_sidebar_text(){
+// 	const sort_option = document.getElementById('sort_article');
+// 	const text_box = document.getElementById('sidebar_text');
 
-	// sort = sort_option.options[sort_option.selectedIndex].text
-	// text_box.innerHTML = sort
-	// console.log(sort, sort_option)
-}
+// 	sort = sort_option.options[sort_option.selectedIndex].text
+// 	text_box.innerHTML = sort
+// 	console.log(sort, sort_option)
+// }
 
 function sidebar(dv,data,the_sort){
 	// console.log(dv, the_sort)
@@ -31,6 +31,11 @@ function sidebar(dv,data,the_sort){
 
 		// update_sidebar_text()
 
+		const sidebar_text = document.getElementById('sidebar_text');
+		const sort_ = sidebar_text.getElementsByClassName('b')[0];
+		sort_.style.textAlign = 'right'
+
+		
 		if (dv == 1){
 			// console.log(data)
 
@@ -62,48 +67,64 @@ function sidebar(dv,data,the_sort){
 					return b.days - a.days;
 				})
 				max = Math.max(...data.map((a,b) => a.days))
+
+				sort_.innerHTML = 'publication date'
 			}
 			else if (the_sort == 3){
 				data.sort((a, b) => {
 					return b.size - a.size;
 				})
 				max = Math.max(...data.map((a,b) => a.size))
+				
+				sort_.innerHTML = 'article size'
 			}
 			else if (the_sort == 4){
 				data.sort((a, b) => {
 					return b.discussion_size - a.discussion_size;
 				})
 				max = Math.max(...data.map((a,b) => a.discussion_size))
+
+				sort_.innerHTML = 'size of discussion page'
 			}
 			else if (the_sort == 5){
 				data.sort((a, b) => {
 					return b.incipit_size - a.incipit_size;
 				})
 				max = Math.max(...data.map((a,b) => a.incipit_size))
+
+				sort_.innerHTML = 'incipit size'
 			}
 			else if (the_sort == 6){
 				data.sort((a, b) => {
 					return b.issues - a.issues;
 				})
 				max = Math.max(...data.map((a,b) => a.issues))
+
+				sort_.innerHTML = 'number of issues'
 			}
 			else if (the_sort == 7){
 				data.sort((a, b) => {
 					return b.images - a.images;
 				})
 				max = Math.max(...data.map((a,b) => a.images))
+
+				sort_.innerHTML = 'number of images'
 			}
 			else if (the_sort == 8){
 				data.sort((a, b) => {
 					return b.edits_editors_ratio - a.edits_editors_ratio;
 				})
 				max = Math.max(...data.map((a,b) => a.edits_editors_ratio))
+
+				sort_.innerHTML = 'ratio edits/editors (edits per editor)'
 			}
 			else if (the_sort == 9){
 				data.sort((a, b) => {
 					return b.linguistic_versions - a.linguistic_versions;
 				})
 				max = Math.max(...data.map((a,b) => a.linguistic_versions))
+
+				sort_.innerHTML = 'number of linguistic versions'
 			}
 
 			// console.log(dv, min, max)
