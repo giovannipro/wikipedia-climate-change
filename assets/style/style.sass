@@ -731,18 +731,20 @@ footer
 /* ------- edits line ------- */
 
 .electrocardiogram
-	// background-color: #f8f8f8
-	border-left: 1px solid #dcdcdc
-	// border-right: 1px solid #dcdcdc
-	// border-bottom: 1px solid #dcdcdc
 
-.domain
-	stroke: none
+	.domain
+		stroke: none
 
-.tick line
-	stroke: none
+	.tick 
+	
+		line
+			stroke: none
 
-.electrocardiogram .tick text
+		text
+			fill: none
+
+
+.electrocardiogram:hover .tick text
 	fill: #c3c3c3
 
 .line

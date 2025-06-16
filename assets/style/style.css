@@ -805,19 +805,17 @@ footer ul li {
 }
 
 /* ------- edits line ------- */
-.electrocardiogram {
-  border-left: 1px solid #dcdcdc;
-}
-
-.domain {
+.electrocardiogram .domain {
   stroke: none;
 }
-
-.tick line {
+.electrocardiogram .tick line {
   stroke: none;
 }
-
 .electrocardiogram .tick text {
+  fill: none;
+}
+
+.electrocardiogram:hover .tick text {
   fill: #c3c3c3;
 }
 

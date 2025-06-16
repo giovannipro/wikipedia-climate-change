@@ -30,21 +30,6 @@ function load_edits(){
 	function edits_loaded(data){
 		console.log('edits loaded', data.length)
 
-		// let max_size = 0
-		// for (item of data){
-		// 	// console.log(item)
-
-		// 	for (revision of item.revisions){
-		// 		size = revision.size
-		// 		// console.log(size)
-
-		// 		if (size > max_size){
-		// 			max_size = size
-		// 		}
-		// 	}
-		// }
-		// console.log('max size', max_size)
-
 		const electrocardiograms = document.getElementsByClassName('electrocardiogram');
 		for (chart of electrocardiograms){
 			
@@ -58,9 +43,6 @@ function load_edits(){
 	
 				width = document.getElementById(container).offsetWidth
 				height = document.getElementById(container).offsetHeight
-
-				// const revisions_data = the_data[0].revisions
-				// console.log(the_data[0].wikidata_id)
 
 				const svg = d3.select('#' + container)
 					.append("svg")
@@ -106,6 +88,14 @@ function load_edits(){
 					.datum(parsedRevisions)
 					.attr("class", "line")
 					.attr("d", line)
+
+				// plot.append("g")
+				// 	.append("text")
+				// 	.attr("x",0)
+				// 	.attr("y", height - 10)
+				// 	.attr("font-size", "0.9em")
+				// 	.attr("fill", "#c3c3c3")
+				// 	.text("avg. edits")
 					
 			}
 
