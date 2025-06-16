@@ -11,22 +11,50 @@ const max_circle_size = 35;
 // }
 
 function load_edits(){
-	d3.json("assets/data/revisions.json")
-		.then(edits_loaded)
+	fetch("assets/data/revisions.json.gz")
+		.then(response => {
+			if (!response.ok) {
+				throw new Error(`Network error: ${response.status} - ${response.statusText}`);
+			}
+			return response.arrayBuffer();
+		})
+		.then(compressedData => {
+			// console.log(compressedData)
+			const edits_data = pako.ungzip(compressedData, { to: 'string' })
+			const parsedData = JSON.parse(edits_data);
+			
+			// console.log(parsedData)
+			edits_loaded(parsedData)
+		})
 
-	function edits_loaded(edits_data){
-		console.log(edits_data.length)
+	function edits_loaded(data){
+		console.log('edits loaded', data.length)
+
+		// let max_size = 0
+		// for (item of data){
+		// 	// console.log(item)
+
+		// 	for (revision of item.revisions){
+		// 		size = revision.size
+		// 		// console.log(size)
+
+		// 		if (size > max_size){
+		// 			max_size = size
+		// 		}
+		// 	}
+		// }
+		// console.log('max size', max_size)
 
 		const electrocardiograms = document.getElementsByClassName('electrocardiogram');
 		for (chart of electrocardiograms){
 			
-			the_data = edits_data.filter(item => item.wikidata_id === chart.id.replace('revision_',''))
+			the_data = data.filter(item => item.wikidata_id === chart.id.replace('revision_',''))
 
 			if (the_data.length > 0){
 				// console.log(the_data.length)
 
 				const container = 'revision_' + the_data[0].wikidata_id
-				// console.log(container)
+				document.getElementById(container).innerHTML = '' // clear the container
 	
 				width = document.getElementById(container).offsetWidth
 				height = document.getElementById(container).offsetHeight
@@ -38,7 +66,6 @@ function load_edits(){
 					.append("svg")
 					.attr("width", width)
 					.attr("height", height)
-
 
 				let plot = svg.append("g")
 					.attr("class", "d3_plot")
@@ -62,8 +89,9 @@ function load_edits(){
 					.range([0, width]);
 
 				const y = d3.scaleLinear()
-					.domain([0, d3.max(parsedRevisions, d => d.size)])
+					.domain([d3.min(parsedRevisions, d => d.size), d3.max(parsedRevisions, d => d.size)])
 					.range([height, 0]);
+				// .domain([0,max_size])
 
 				const line = d3.line()
 					.x(d => x(d.date))
@@ -87,7 +115,7 @@ function load_edits(){
 
 document.addEventListener("keypress", (event) => {
 
-	if (event.key == 'e' || event.key == 'E'){
+	if (event.key == 't' || event.key == 'T'){ // timeline
 		load_edits()
 	}
 })
