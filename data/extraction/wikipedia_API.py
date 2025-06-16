@@ -6,6 +6,27 @@ import time
 wikipedia_link = 'https://en.wikipedia.org/wiki/'
 wikipedia_api = "https://en.wikipedia.org/w/api.php"
 
+
+def get_linguistic_versions(title):
+
+    params = {
+        "action": "query",
+        "titles": title,
+        "prop": "langlinks",
+        "lllimit": "max",
+        "format": "json"
+    }
+    
+    response = requests.get(url=wikipedia_api, params=params)
+    data = response.json()
+    
+    pages = data.get("query", {}).get("pages", {})
+    page = next(iter(pages.values()))
+
+    langlinks = page.get("langlinks", [])
+    
+    return len(langlinks)
+
 def check_article_restrictions(title):
     
     params = {
@@ -168,7 +189,7 @@ def get_wikipedia_extract(title):
 def read_csv_file(file_path):
 
     input_file = file_path + 'input/article_list.tsv'
-    output_file = file_path + 'output/output_2.tsv'
+    output_file = file_path + 'output/output.tsv'
 
     df = pd.read_csv(input_file, delimiter='\t')
     
@@ -190,8 +211,11 @@ def read_csv_file(file_path):
     # if 'editors' not in df.columns:
     #     df['editors'] = None
 
-    if 'restrictions' not in df.columns:
-        df['restrictions'] = None
+    # if 'restrictions' not in df.columns:
+    #     df['restrictions'] = None
+
+    if 'linguistic_versions' not in df.columns:
+        df['linguistic_versions'] = None
     
     count = 0   
     for index, row in df.iterrows():
@@ -217,12 +241,16 @@ def read_csv_file(file_path):
             # data = get_edits_editors(title)
             # print(count, title, data.get('total_edits'), data.get('unique_editors'))
 
-            data = check_article_restrictions(title)
-            restrictions = str(data).replace('[', '').replace(']', '').replace("'", '')
-            print(count, title, restrictions)
+            # data = check_article_restrictions(title)
+            # restrictions = str(data).replace('[', '').replace(']', '').replace("'", '')
+            # print(count, title, restrictions)
 
-            df.loc[index, 'restrictions'] = restrictions
-            result_df = df[['title', 'restrictions']]
+            data = get_linguistic_versions(title)
+            linguistic_versions = data
+            print(count, title, linguistic_versions)
+
+            df.loc[index, 'linguistic_versions'] = linguistic_versions
+            result_df = df[['title', 'linguistic_versions']]
 
     result_df.to_csv(output_file, sep='\t', index=False)
 

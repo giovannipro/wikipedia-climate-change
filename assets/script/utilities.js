@@ -618,6 +618,7 @@ function format_data(data){
 		d.edits = +d.edits
 		d.editors = +d.editors
 		d.edits_editors_ratio = parseFloat((+d.edits / +d.editors).toFixed(1))
+		d.linguistic_versions = +d.linguistic_versions
 
 		if (d.references !== "-"){
 			d.references = +d.references
@@ -711,6 +712,7 @@ function get_tooltip(dv) {
 				incipit = 'incipit'
 				edits = 'modifiche'
 				editors = 'editori'
+				languages = 'versioni linguistiche'
 
 				references = "riferimenti bibliog."
 				notes = "note"
@@ -728,6 +730,7 @@ function get_tooltip(dv) {
 				incipit = "lead section"
 				edits = 'edits'
 				editors = 'editors'
+				languages = 'linguistic versions'
 
 				references = "references"
 				notes = "notes"
@@ -805,6 +808,13 @@ function get_tooltip(dv) {
 			the_editors_ratio += "<td></td>"
 			the_editors_ratio += "</tr>"
 
+			the_languages = ''
+			the_languages += "<tr>"
+			the_languages += "<td class='label'>" + languages + "</td>"
+			the_languages += "<td class='value'>" + d.linguistic_versions.toLocaleString() + "</td>"
+			the_languages += "<td></td>"
+			the_languages += "</tr>"
+
 			the_edits = ''
 			the_edits += "<tr>"
 			the_edits += "<td class='label'>" + edits + "</td>"
@@ -838,6 +848,7 @@ function get_tooltip(dv) {
 				content += the_edits
 				content += the_editors
 				content += the_editors_ratio
+				content += the_languages
 
 				content += '</table>'
 				content += '<hr style="border: 0.5px solid #e3e3e3"/>'

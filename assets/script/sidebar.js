@@ -95,6 +95,12 @@ function sidebar(dv,data,the_sort){
 			}
 			else if (the_sort == 8){
 				data.sort((a, b) => {
+					return b.edits_editors_ratio - a.edits_editors_ratio;
+				})
+				max = Math.max(...data.map((a,b) => a.edits_editors_ratio))
+			}
+			else if (the_sort == 9){
+				data.sort((a, b) => {
 					return b.linguistic_versions - a.linguistic_versions;
 				})
 				max = Math.max(...data.map((a,b) => a.linguistic_versions))
@@ -162,6 +168,14 @@ function sidebar(dv,data,the_sort){
 					detail = d.images
 					num = d.images
 				}
+				else if (the_sort == 8){
+					detail = d.edits_editors_ratio //.toLocaleString()
+					num = d.edits_editors_ratio
+				}
+				else if (the_sort == 9){
+					detail = d.linguistic_versions.toLocaleString()
+					num = d.linguistic_versions
+				}
 				// else if (the_sort == 8){
 				// 	detail = formatNumber(d.linguistic_versions) //.toLocaleString()
 				// 	num = d.linguistic_versions
@@ -192,6 +206,10 @@ function sidebar(dv,data,the_sort){
 					detail = formatNumber(d.size) //.toLocaleString()
 					num = d.size
 				}
+				// else if (the_sort == 9){
+				// 	detail = formatNumber(d.linguistic_versions) //.toLocaleString()
+				// 	num = d.linguistic_versions
+				// }
 				// else if (the_sort == 6){
 				// 	detail = formatNumber(d.linguistic_versions) //.toLocaleString()
 				// 	num = d.linguistic_versions

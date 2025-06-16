@@ -348,6 +348,14 @@ function dv2(the_sort) { // region, category,
 					return d.edits_editors_ratio
 				})
 			}
+			else if (the_sort == 9){
+				min = d3.min(filtered_data, function(d) {
+					return d.linguistic_versions
+				})
+				max = d3.max(filtered_data, function(d) { 
+					return d.linguistic_versions
+				})
+			}
 			// console.log(min, max)
 
 			y_min = d3.min(filtered_data, function(d) { 
@@ -399,6 +407,9 @@ function dv2(the_sort) { // region, category,
 					else if (the_sort == 8){
 						direction = tooltip_direction(filtered_data,d.edits_editors_ratio,min,max,d.avg_pv, false)
 					}
+					else if (the_sort == 9){
+						direction = tooltip_direction(filtered_data,d.linguistic_versions,min,max,d.avg_pv, false)
+					}
 					// console.log(d.article, direction)
 					// let size = (r(Math.sqrt(d.size/3.14)) * 0.10) + 20
 
@@ -439,6 +450,9 @@ function dv2(the_sort) { // region, category,
 					}
 					else if (the_sort == 8){
 						direction = tooltip_direction(filtered_data,d.edits_editors_ratio,min,max,d.avg_pv, false)
+					}
+					else if (the_sort == 9){
+						direction = tooltip_direction(filtered_data,d.linguistic_versions,min,max,d.avg_pv, false)
 					}
 					return direction 
 				})
@@ -500,6 +514,9 @@ function dv2(the_sort) { // region, category,
 					}
 					else if (the_sort == 8){
 						x_position = x(d.edits_editors_ratio)
+					}
+					else if (the_sort == 9){
+						x_position = x(d.linguistic_versions)
 					}
 					else { // the_sort === undefined
 						x_position = x(i)
@@ -753,6 +770,14 @@ function dv2(the_sort) { // region, category,
 						return d.edits_editors_ratio
 					})
 				}
+				else if (the_sort == 9){
+					min = d3.min(filtered_data, function(d) { 
+						return d.linguistic_versions
+					})
+					max = d3.max(filtered_data, function(d) { 
+						return d.linguistic_versions
+					})
+				}
 
 				if (the_sort == 2){
 					x = d3.scaleLinear()
@@ -810,6 +835,9 @@ function dv2(the_sort) { // region, category,
 						else if (the_sort == 8){
 							x_position = x(d.edits_editors_ratio)
 						}
+						else if (the_sort == 9){
+							x_position = x(d.linguistic_versions)
+						}
 						else { // the_sort === undefined
 							x_position = x(i)
 						}
@@ -844,6 +872,9 @@ function dv2(the_sort) { // region, category,
 						}
 						else if (the_sort == 8){
 							direction = tooltip_direction(filtered_data,d.edits_editors_ratio,min,max,d.avg_pv, false)
+						}
+						else if (the_sort == 9){
+							direction = tooltip_direction(filtered_data,d.linguistic_versions,min,max,d.avg_pv, false)
 						}
 						return direction 
 					})
@@ -1099,6 +1130,12 @@ function dv2(the_sort) { // region, category,
 					}
 					else if (the_sort == 7){
 						x_position = x(d.images)
+					}
+					else if (the_sort == 8){
+						x_position = x(d.edits_editors_ratio)
+					}
+					else if (the_sort == 9){
+						x_position = x(d.linguistic_versions)
 					}
 					else { // the_sort === undefined
 						x_position = x(i)
