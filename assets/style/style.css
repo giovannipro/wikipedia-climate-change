@@ -534,7 +534,7 @@ header a {
   border: none;
 }
 #sidebar_content .item_bubble {
-  width: 50px;
+  width: 60px;
   display: flex;
   align-items: center;
   justify-content: flex-start;

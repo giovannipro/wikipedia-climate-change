@@ -430,7 +430,7 @@ function sidebar(dv,data,the_sort){
 
 			let svg = d3.select('#' + container)
 				.append("svg")
-				.attr("width", box_size)
+				.attr("width", box_size + 230)
 				.attr("height", box_size)
 				.attr("class", "bubble_svg")
 
@@ -476,6 +476,67 @@ function sidebar(dv,data,the_sort){
 				// .attr("stroke", function(d,i){
 				// 	return "#00b2ff"
 				// })
+
+			// restrictions
+			const padlock_width = 6
+			const padlock_animation = 500
+			let padlock = article_box.append('g')
+				.attr('transform', function(d,i){
+					const x = r(Math.sqrt(individual_data.size/3.14)) + 5 + (padlock_width/2)
+					return "translate(" + (box_size/2 + x) + "," + box_size/2  + ")"
+				})
+				
+			let padlock_a = padlock.append("circle")
+				// .transition()
+				// .duration(500)
+				// .delay(function(d,i){ 
+				// 	return i * 2 + padlock_animation
+				// })
+				// .ease(d3.easeLinear)
+				// .duration(padlock_animation) 
+				.attr('stroke-width',1)
+				.attr("r",0)
+				// .transition()
+				// .delay(500)
+				.attr("fill", "transparent")
+				.attr("stroke", function (d){
+					if (individual_data.restrictions != ''){
+						return "gray"
+					}
+					else {
+						return "transparent"
+					}
+				})
+				.attr("r",padlock_width/2 - 1)
+			
+			let padlock_b = padlock.append("rect")
+				// .transition()
+				// .duration(500)
+				// .delay(function(d,i){ 
+				// 	return i * 2 +  padlock_animation
+				// })
+				// .ease(d3.easeLinear)
+				// .duration(padlock_animation) 
+				.attr("width",padlock_width)
+				.attr("height",padlock_width/5*4)
+				.attr('x',-padlock_width/2)
+				.attr('y',0)
+				.attr("stroke", function (d){
+					if (individual_data.restrictions != ''){
+						return "gray"
+					}
+					else {
+						return "transparent"
+					}
+				})
+				.attr("fill", function (d){
+					if (individual_data.restrictions != ''){
+						return "white"
+					}
+					else {
+						return "transparent"
+					}
+				})
 		}
 	}
 	load_sidebar()
