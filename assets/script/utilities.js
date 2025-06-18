@@ -582,9 +582,9 @@ function changeTitle(lang) {
 			break;
 
 		case 'Voci con avvisi':
-			newTitle = 'Articles with issues'
+			newTitle = 'Articles with warning tags'
 			break;
-		case 'Articles with issues':
+		case 'Articles with warning tags':
 			newTitle = 'Voci con avvisi'
 			break;
 
@@ -725,7 +725,7 @@ function get_tooltip(dv) {
 				visits = "daily visits"
 				size = "size"
 				discussion = "discussion"
-				issues = "issues"
+				issues = "warning tags"
 				images = "images"
 				incipit = "lead section"
 				edits = 'edits'

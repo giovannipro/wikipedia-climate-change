@@ -237,7 +237,7 @@ function sidebar(dv,data,the_sort){
 				})
 				max = Math.max(...data.map((a,b) => a.issues))
 
-				sort_.innerHTML = 'number of issues'
+				sort_.innerHTML = 'number of warning tags'
 			}
 			else if (the_sort == 7){
 				data.sort((a, b) => {
