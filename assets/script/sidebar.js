@@ -38,6 +38,32 @@ function load_edits(){
 			if (the_data.length > 0){
 				// console.log(the_data.length)
 
+				let max_size = 0
+				
+				const revisions_data = the_data[0].revisions
+				let  min_size = revisions_data[0].size
+				// console.log(revisions_data)
+
+				const current_revision = {
+					'timestamp': new Date().toISOString(),
+					'size': revisions_data[0].size
+				}
+				
+				revisions_data.unshift(current_revision);
+				
+				for (edit of revisions_data){
+					const the_size = edit.size 
+
+					if (the_size > max_size) {
+						max_size = the_size
+					}
+
+					if (the_size < min_size){
+						min_size = the_size
+					}
+				}
+				// console.log(min_size, max_size)
+
 				const container = 'revision_' + the_data[0].wikidata_id
 				document.getElementById(container).innerHTML = '' // clear the container
 	
@@ -51,8 +77,7 @@ function load_edits(){
 
 				let plot = svg.append("g")
 					.attr("class", "d3_plot")
-
-				const revisions_data = the_data[0].revisions
+					// .attr("transform","translate(0,-1)")
 
 				const parsedRevisions = revisions_data.map(d => ({
 					date: new Date(d.timestamp),
@@ -67,49 +92,56 @@ function load_edits(){
 						new Date("2025-12-31"),
 						// d3.max(parsedRevisions, d => d.date) // Automatically calculate the latest date
 					])
-
 					.range([0, width]);
 
+				// const vertical_shift = 20
 				const y = d3.scaleLinear()
-					.domain([d3.min(parsedRevisions, d => d.size), d3.max(parsedRevisions, d => d.size)])
-					.range([height, 0]);
+					.domain([0, d3.max(parsedRevisions, d => d.size)])
+					.range([height - 2, 0]);
 				// .domain([0,max_size])
 
-				const line = d3.line()
-					.x(d => x(d.date))
-					.y(d => y(d.size))
+				// const line = d3.line()
+				// 	.x(d => x(d.date))
+				// 	.y(d => y(d.size))
+				// 	.curve(d3.curveStepAfter)
+
+				const area = d3.area()
+					.x((d) => x(d.date))
+					.y0(y(0))
+					.y1((d) => y(d.size))
 					.curve(d3.curveStepAfter)
 
+					
+				plot.append("path")
+					.datum(parsedRevisions)
+					.attr("transform", `translate(0,0)`)
+					.attr("class", "timeline")
+					.attr("d", area)
+					
+				// labels
+				labels = plot.append("g")
+					
+				labels.append("text")
+					.attr("x", 0)
+					.attr("y", height - 5)
+					.attr("font-size", "0.6rem")
+					// .attr("text-anchor","right")
+					.attr("fill", "#c3c3c3")
+					.text("min: " + min_size.toLocaleString() + " - max: " + max_size.toLocaleString() + ' (bytes)')
+				
 				plot.append("g")
 					.attr("transform", `translate(0,16)`)
 					.call(d3.axisTop(x));
-
-				plot.append("path")
-					.datum(parsedRevisions)
-					.attr("class", "line")
-					.attr("d", line)
-
-				// plot.append("g")
-				// 	.append("text")
-				// 	.attr("x",0)
-				// 	.attr("y", height - 10)
-				// 	.attr("font-size", "0.9em")
-				// 	.attr("fill", "#c3c3c3")
-				// 	.text("avg. edits")
-					
 			}
-
 		}
 	}
 }
 
 document.addEventListener("keypress", (event) => {
-
 	if (event.key == 't' || event.key == 'T'){ // timeline
 		load_edits()
 	}
 })
-
 
 function sidebar(dv,data,the_sort){
 	// console.log(dv, the_sort)
@@ -134,7 +166,7 @@ function sidebar(dv,data,the_sort){
 
 		const sidebar_text = document.getElementById('sidebar_text');
 		const sort_ = sidebar_text.getElementsByClassName('b')[0];
-		sort_.style.textAlign = 'right'
+		// sort_.style.textAlign = 'right'
 
 		
 		if (dv == 1){
@@ -155,13 +187,17 @@ function sidebar(dv,data,the_sort){
 
 		// sort data and get max
 		if (dv == 2){
+
+			sort_.innerHTML = '<button" id="show_timeline" class="button_filter lang_switch" data-it="Mostra la linea temporale delle modifiche" data-en="Show size timelines" style="width: 10rem;">Show size timelines</button">'
+
 			if (the_sort == 1){
-				// data.sort((a, b) => {
-				// 	return a.article - b.article;
-				// })
-				
 				data = data.sort((a, b) => a.article.localeCompare(b.article));
 				max = Math.max(...data.map((a,b) => a.article))
+
+				const timeline_button = document.getElementById('show_timeline');
+				timeline_button.addEventListener("click", (event) => {
+					load_edits()
+				})
 			}
 			else if (the_sort == 2){
 				data.sort((a, b) => {

@@ -333,13 +333,14 @@ header a {
 
 .button_filter {
   background-color: #eaeaea;
-  border-radius: 1rem;
+  border-radius: 0.75rem;
   display: block;
   width: 7rem;
   height: 1.7rem;
   text-align: center;
   padding-top: 0.2rem;
   cursor: pointer;
+  color: gray;
 }
 
 /* ------- map ------- */
@@ -469,6 +470,9 @@ header a {
 }
 #sidebar_text .b {
   width: 30%;
+  text-align: right;
+  display: flex;
+  justify-content: flex-end;
 }
 @media only screen and (max-width: 450px) {
   #sidebar_text .b {
@@ -819,10 +823,10 @@ footer ul li {
   fill: #c3c3c3;
 }
 
-.line {
-  fill: none;
+.timeline {
+  fill: #8ab2d3;
   stroke: steelblue;
-  stroke-width: 2px;
+  stroke-width: 1.5px;
 }
 
 /* ------- dataviz n. 2 ------- */

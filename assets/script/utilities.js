@@ -21,7 +21,7 @@ const categoryColors = {
 	"treaty":"#c8b0e9",
 	"United Nations Climagte Change Conference": "#32b732",
 	"": "#ccc",
-	"default": "#d8e5e5" //"#adacac"
+	"default": "#87b5bd" //"#adacac"
 };
 
 function formatNumber(num) {
