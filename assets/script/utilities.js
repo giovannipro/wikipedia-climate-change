@@ -619,6 +619,7 @@ function format_data(data){
 		d.editors = +d.editors
 		d.edits_editors_ratio = parseFloat((+d.edits / +d.editors).toFixed(1))
 		d.linguistic_versions = +d.linguistic_versions
+		d.total_views = +d.total_views
 
 		if (d.references !== "-"){
 			d.references = +d.references
@@ -704,6 +705,7 @@ function get_tooltip(dv) {
 				restrictions = 'Restrizioni'
 				instance_of = 'Istanza di'
 
+				total_visits = "visite totali"
 				visits = "visite giornaliere"
 				size = "dimensioni"
 				discussion = "discussione"
@@ -722,6 +724,7 @@ function get_tooltip(dv) {
 				restrictions = 'Restrictions'
 				instance_of = 'Instance of'
 
+				total_visits = "total visits"
 				visits = "daily visits"
 				size = "size"
 				discussion = "discussion"
@@ -757,12 +760,17 @@ function get_tooltip(dv) {
 
             content += '<hr style="border: 0.5px solid #e3e3e3"/>'
 
-            content += '<table>'
+			the_total_visits = ''
+            the_total_visits += "<tr>"
+			the_total_visits += "<td class='label'>" + total_visits + "</td>"
+			the_total_visits += "<td class='value'>" + d.total_views.toLocaleString() + "</td>"
+			the_total_visits += "<td></td>"
+			the_total_visits += "</tr>"
 
             avg_daily_visits = ''
             avg_daily_visits += "<tr>"
 			avg_daily_visits += "<td class='label'>" + visits + "</td>"
-			avg_daily_visits += "<td class='value'>" + d.avg_pv.toLocaleString() + "</td>"
+			avg_daily_visits += "<td class='value'>" + Math.floor(d.avg_pv).toLocaleString() + "</td>"
 			avg_daily_visits += "<td></td>"
 			avg_daily_visits += "</tr>"
 
@@ -844,6 +852,10 @@ function get_tooltip(dv) {
 			// the_notes += "</tr>"
 
 			if (dv == 'dv2') {
+
+            	content += '<table>'
+
+				content += the_total_visits
 				content += avg_daily_visits
 				content += the_edits
 				content += the_editors
@@ -859,6 +871,8 @@ function get_tooltip(dv) {
 				content += the_discussion
 				content += the_issues
 				content += the_images
+
+				content += "</table>"
 			}
 			// else if (dv == 'dv3'){
 			// 	content += avg_daily_visits
@@ -869,7 +883,7 @@ function get_tooltip(dv) {
 			// 	content += the_images
 			// }
 
-            content += "</table>"
+            
 
             return content;
         });

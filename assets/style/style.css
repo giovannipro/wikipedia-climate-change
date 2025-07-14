@@ -424,7 +424,7 @@ header a {
 }
 
 /* ------- sidebar ------- */
-#sidebar_button_open, #scale_button_box {
+#sidebar_button_open, #scale_button_box, #total_button_box {
   width: 2.5rem;
   height: 2.5rem;
   padding: 0.3rem;
@@ -851,6 +851,10 @@ footer ul li {
 
 #grids #grid_issues .tick line, #grids #grid_features .tick line {
   stroke: #e9e4e4;
+}
+
+.hover {
+  cursor: pointer;
 }
 
 /* ------- dataviz n. 3 ------- */

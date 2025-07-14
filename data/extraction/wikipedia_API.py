@@ -1,7 +1,8 @@
 import requests
-import csv
 import pandas as pd
 import time
+import requests
+from urllib.parse import quote
 
 wikipedia_link = 'https://en.wikipedia.org/wiki/'
 wikipedia_api = "https://en.wikipedia.org/w/api.php"
@@ -186,10 +187,44 @@ def get_wikipedia_extract(title):
 
     return character_count, word_count
 
+def get_page_view(title, days):
+
+    start_date = '20010101'
+    end_date = '20250701'
+    lang = 'en'
+
+    encoded_title = quote(title, safe='')
+    url = f"https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/{lang}.wikipedia/all-access/all-agents/{encoded_title}/daily/{start_date}/{end_date}"
+
+    headers = {
+        'User-Agent': 'PageviewsFetcher/1.0 (me@example.com)'
+    }
+
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        views = response.json()
+
+        all_views = 0
+        for item in views['items']:
+            all_views += item['views']
+
+        daily_avg_views = all_views / days
+        
+        return all_views, daily_avg_views
+    
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching data: {e}")
+        return None
+    
+# data = get_page_view("1452/1453 mystery eruption",7857)
+# print(data)
+
 def read_csv_file(file_path):
 
-    input_file = file_path + 'input/article_list.tsv'
-    output_file = file_path + 'output/output.tsv'
+    input_file = file_path + 'input/article_days.tsv'
+    # input_file = file_path + 'input/article_list.tsv'
+    output_file = file_path + 'output/output_pv.tsv'
 
     df = pd.read_csv(input_file, delimiter='\t')
     
@@ -217,14 +252,22 @@ def read_csv_file(file_path):
     # if 'linguistic_versions' not in df.columns:
     #     df['linguistic_versions'] = None
 
-    if 'revisions' not in df.columns:
-        df['revisions'] = None
+    # if 'revisions' not in df.columns:
+    #     df['revisions'] = None
+    
+    if 'total_pv' not in df.columns:
+        df['total_pv'] = None
+
+    if 'avg_pv' not in df.columns:
+        df['avg_pv'] = None
     
     count = 0   
     for index, row in df.iterrows():
         count += 1
-        if count > 0 and count < 10:
+
+        if count > 0 and count < 10000:
             title = row['title']
+            days = row['days']
 
             # data = get_wikipedia_extract(title)[0]
             # df.loc[index, 'incipit_size'] = data
@@ -248,12 +291,19 @@ def read_csv_file(file_path):
             # restrictions = str(data).replace('[', '').replace(']', '').replace("'", '')
             # print(count, title, restrictions)
 
-            data = get_linguistic_versions(title)
-            linguistic_versions = data + 1 # +1 for the English version itself
-            print(count, title, linguistic_versions)
+            # data = get_linguistic_versions(title)
+            # linguistic_versions = data + 1 # +1 for the English version itself
+            # print(count, title, linguistic_versions)
 
-            df.loc[index, 'revisions'] = data
-            result_df = df[['title', 'revisions']]
+            data = get_page_view(title, days)
+            print(count, title)
+
+            tot_pv = data[0]
+            avg_pv_ = data[1] 
+
+            df.loc[index, 'total_pv'] = tot_pv
+            df.loc[index, 'avg_pv'] = avg_pv_
+            result_df = df[['title', 'total_pv', 'avg_pv']]
 
     result_df.to_csv(output_file, sep='\t', index=False)
 

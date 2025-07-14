@@ -7,8 +7,8 @@ const shiftx_article = 30;
 const wiki_link = "https://en.wikipedia.org/wiki/";
 const variation_line_opacity = 0.7;
 
-let limit_y_min = 100
-let limit_y_max = 70000
+let limit_y_min = 300
+let limit_y_max = 115000
 let max_update = 0
 let min_update = 0
 
@@ -16,7 +16,9 @@ const stroke_dash = "3,3";
 
 const log_exponent = 0.5; 
 
-function dv2(the_sort) { // region, category,
+let y_axis_value = 'daily'
+
+function dv2(the_sort) {
 
 	// size constants
 	let window_w = document.getElementById("dv2").offsetWidth;
@@ -44,7 +46,6 @@ function dv2(the_sort) { // region, category,
 
 		data = format_data(data)
 		filtered_data = data
-		// console.log(data)
 	
 		statistics(data)
 
@@ -61,11 +62,8 @@ function dv2(the_sort) { // region, category,
 
 		let min = 0
 		let max = filtered_data.length
-		// console.log(min,max)
 
-		let y_max = d3.max(filtered_data, function(d) { 
-			return d.avg_pv;
-		})
+		let y_max = 0
 
 		let r_max = d3.max(filtered_data, function(d) { 
 			return Math.sqrt(d.size/3.14);
@@ -104,26 +102,13 @@ function dv2(the_sort) { // region, category,
 		if (window_w < 700){
 			yAxis_margin = 0;
 		}
+
 		let yAxis = plot.append("g")
 			.attr("id","yAxis")
 			.attr("transform", "translate(" + yAxis_margin + "," + (margin.top) +")")
 			.call(d3.axisLeft(y))
 			.selectAll("text")
 			.attr("y", -10)
-
-		let yaxis_label_box = plot.append("g")
-			.attr("class","yaxis_label")
-			.attr("transform","translate(7," + height + ")")
-
-		let yaxis_label = yaxis_label_box.append("text")
-			.attr("class","lang_switch") // axis_name
-			// .text("visite giornaliere (media)")
-			.text("daily visits (average)")
-			.attr("data-it","visite giornaliere (media)")
-			.attr("data-en","daily visits (average)")
-			.attr("id","yaxis_label")
-			.attr("y", -18)
-			.attr("font-size",font_size)
 
 		function make_y_gridlines() {		
 			return d3.axisLeft(y)
@@ -176,8 +161,8 @@ function dv2(the_sort) { // region, category,
 
 		plot.call(tooltip)
 
-					// update the top bar filters
-			// --------------
+		// update the top bar filters
+		// --------------
 
 		const min_pageviews = document.getElementById("min_pageviews")
 		const max_pageviews = document.getElementById("max_pageviews")
@@ -194,9 +179,6 @@ function dv2(the_sort) { // region, category,
 			return acc;
 		}, {});
 
-		// const sortedCategories = Object.entries(counts)
-		// 	.filter(([cat, count]) => count >= 2)
-		// 	.sort((a, b) => b[1] - a[1]); // Sort by count descending
 
 		const sortedCategories = Object.entries(counts)
 			.filter(([cat, count]) => count >= 1)
@@ -218,9 +200,8 @@ function dv2(the_sort) { // region, category,
 			filter_instance.appendChild(option);
 		});
 
-		function display_data(instance,the_sort,limit_y_min, limit_y_max){ // region, category, 
-			// console.log(data)
-			// console.log(the_sort)
+		function display_data(instance, the_sort, limit_y_min, limit_y_max, y_axis_value){ // region, category, 
+			// console.log(y_axis_value)
 
 			the_sort = parseInt(the_sort)
 
@@ -249,41 +230,6 @@ function dv2(the_sort) { // region, category,
 					item.avg_pv  < limit_y_max
 				)
 			}
-			// console.log(filtered_data)
-
-			// if (region == 'all'){
-			// 	// region_data = data 
-			// 	region_data = data
-			// 	// data.filter(item =>
-			// 	// 	item.avg_pv > filter_item
-			// 	// )
-			// }
-			// else {
-			// 	region_data = data.filter(item => 
-			// 		item.region === region
-			// 	)
-			// }
-			// console.log(region_data)
-
-			// if (category != 'all'){
-			// 	filtered_data = region_data.filter(item =>
-			// 		item.category === category
-			// 	)
-			// 	.filter(item =>
-			// 		item.size > 0
-			// 	)
-			// }
-			// else {
-			// 	filtered_data = region_data.filter(item =>
-			// 		item.avg_pv > filter_item
-			// 	)
-			// }
-			// console.log(filtered_data)
-
-			// if (filtered_data.length == 0){
-			// 	show_no_data()
-			// }
-
 
 			// review the elements attributes
 			// ---------------------------
@@ -358,17 +304,25 @@ function dv2(the_sort) { // region, category,
 			}
 			// console.log(min, max)
 
-			y_min = d3.min(filtered_data, function(d) { 
-				return d.avg_pv;
-			})
-
-			y_max = d3.max(filtered_data, function(d) { 
-				return d.avg_pv;
-			})
-
-			x = d3.scaleLinear()
-				.domain([min,max])
-				.range([0,width-100])
+			if (y_axis_value == 'daily'){
+				y_min = d3.min(filtered_data, function(d) { 
+					return d.avg_pv;
+				})
+	
+				y_max = d3.max(filtered_data, function(d) { 
+					return d.avg_pv;
+				})
+			}
+			else {
+				y_min = d3.min(filtered_data, function(d) { 
+					return d.total_views;
+				})
+	
+				y_max = d3.max(filtered_data, function(d) { 
+					return d.total_views;
+				})
+			}
+			// console.log(y_axis_value, y_min, y_max)
 
 			x = d3.scaleLinear()
 				.domain([min,max])
@@ -382,36 +336,35 @@ function dv2(the_sort) { // region, category,
 				.offset(function (d,i){
 					let direction = ''
 					let off = [0,0] // [top, left]
+					// console.log(y_axis_value)
 
 					if (the_sort == 1) { // title
-						direction = tooltip_direction(filtered_data, i, min, max, d.avg_pv, false)
+						direction = tooltip_direction(filtered_data, i, min, max, d.avg_pv, d.total_views, false)
 					}
 					else if (the_sort == 2){
-						direction = tooltip_direction(filtered_data,d.days,min,max,d.avg_pv, true)
+						direction = tooltip_direction(filtered_data, d.days, min, max, d.avg_pv, d.total_views, true)
 					}
 					else if (the_sort == 3){
-						direction = tooltip_direction(filtered_data,d.size,min,max,d.avg_pv, false)
+						direction = tooltip_direction(filtered_data, d.size, min, max, d.avg_pv, d.total_views, false)
 					}
 					else if (the_sort == 4){
-						direction = tooltip_direction(filtered_data,d.discussion_size,min,max,d.avg_pv, false)
+						direction = tooltip_direction(filtered_data, d.discussion_size, min, max, d.avg_pv, d.total_views, false)
 					}
 					else if (the_sort == 5){
-						direction = tooltip_direction(filtered_data,d.incipit_size,min,max,d.avg_pv, false)
+						direction = tooltip_direction(filtered_data, d.incipit_size, min, max, d.avg_pv, d.total_views, false)
 					}
 					else if (the_sort == 6){
-						direction = tooltip_direction(filtered_data,d.issues,min,max,d.avg_pv, false)
+						direction = tooltip_direction(filtered_data, d.issues, min, max, d.avg_pv, d.total_views, false)
 					}
 					else if (the_sort == 7){
-						direction = tooltip_direction(filtered_data,d.images,min,max,d.avg_pv, false)
+						direction = tooltip_direction(filtered_data, d.images, min, max, d.avg_pv, d.total_views, false)
 					}
 					else if (the_sort == 8){
-						direction = tooltip_direction(filtered_data,d.edits_editors_ratio,min,max,d.avg_pv, false)
+						direction = tooltip_direction(filtered_data, d.edits_editors_ratio, min, max, d.avg_pv, d.total_views, false)
 					}
 					else if (the_sort == 9){
-						direction = tooltip_direction(filtered_data,d.linguistic_versions,min,max,d.avg_pv, false)
+						direction = tooltip_direction(filtered_data, d.linguistic_versions, min, max, d.avg_pv, d.total_views, false)
 					}
-					// console.log(d.article, direction)
-					// let size = (r(Math.sqrt(d.size/3.14)) * 0.10) + 20
 
 					if (direction == 'nw'){
 						off = [-10,-10] 
@@ -428,31 +381,31 @@ function dv2(the_sort) { // region, category,
 				.direction(function (d,i) {
 					let direction = ''
 					if (the_sort == 1) { // title
-						direction = tooltip_direction(filtered_data, i, min, max, d.avg_pv, false)
+						direction = tooltip_direction(filtered_data, i, min, max, d.avg_pv, d.total_views, false)
 					}
 					else if (the_sort == 2){
-						direction = tooltip_direction(filtered_data,d.days,min,max,d.avg_pv, true)
+						direction = tooltip_direction(filtered_data, d.days, min, max, d.avg_pv, d.total_views, true)
 					}
 					else if (the_sort == 3){
-						direction = tooltip_direction(filtered_data,d.size,min,max,d.avg_pv, false)
+						direction = tooltip_direction(filtered_data, d.size, min, max, d.avg_pv, d.total_views, false)
 					}
 					else if (the_sort == 4){
-						direction = tooltip_direction(filtered_data,d.discussion_size,min,max,d.avg_pv, false)
+						direction = tooltip_direction(filtered_data, d.discussion_size, min, max, d.avg_pv, d.total_views, false)
 					}
 					else if (the_sort == 5){
-						direction = tooltip_direction(filtered_data,d.incipit_size,min,max,d.avg_pv, false)
+						direction = tooltip_direction(filtered_data, d.incipit_size, min, max, d.avg_pv, d.total_views, false)
 					}
 					else if (the_sort == 6){
-						direction = tooltip_direction(filtered_data,d.issues,min,max,d.avg_pv, false)
+						direction = tooltip_direction(filtered_data, d.issues, min, max, d.avg_pv, d.total_views, false)
 					}
 					else if (the_sort == 7){
-						direction = tooltip_direction(filtered_data,d.images,min,max,d.avg_pv, false)
+						direction = tooltip_direction(filtered_data, d.images, min, max, d.avg_pv, d.total_views, false)
 					}
 					else if (the_sort == 8){
-						direction = tooltip_direction(filtered_data,d.edits_editors_ratio,min,max,d.avg_pv, false)
+						direction = tooltip_direction(filtered_data, d.edits_editors_ratio, min, max, d.avg_pv, d.total_views, false)
 					}
 					else if (the_sort == 9){
-						direction = tooltip_direction(filtered_data,d.linguistic_versions,min,max,d.avg_pv, false)
+						direction = tooltip_direction(filtered_data, d.linguistic_versions, min, max, d.avg_pv, d.total_views, false)
 					}
 					return direction 
 				})
@@ -471,10 +424,6 @@ function dv2(the_sort) { // region, category,
 
 			// plot data
 			// ---------------------------
-
-			// for (item of filtered_data){
-			// 	console.log(item.avg_pv)
-			// }
 
 			article = articles.selectAll("g")
 				.data(filtered_data)
@@ -518,7 +467,7 @@ function dv2(the_sort) { // region, category,
 					else if (the_sort == 9){
 						x_position = x(d.linguistic_versions)
 					}
-					else { // the_sort === undefined
+					else {
 						x_position = x(i)
 					}
 					return "translate(" + (x_position + 50) + "," + 0 + ")"
@@ -530,7 +479,18 @@ function dv2(the_sort) { // region, category,
 			let article_circles = article.append("g")
 				.attr("class","article_circles")
 				.attr("transform",function (d,i) {
-					return "translate(" + 0 + "," + y(+d.avg_pv) + ")"
+
+					let output = ''
+					if (y_axis_value == 'daily'){
+						// console.log('daily', d.article, d.avg_pv)
+						output = "translate(" + 0 + "," + y(d.avg_pv) + ")"
+					}
+					else {
+						// console.log('total', d.article, d.total_views)
+						output = "translate(" + 0 + "," + y(d.total_views) + ")"
+					}
+
+					return output 
 				})	
 				.attr("id", function(d,i){
 					return 'id_' + d.id_wikidata
@@ -542,11 +502,6 @@ function dv2(the_sort) { // region, category,
 					return wiki_link + d.article
 				})
 				.attr("target","_blank")
-
-			// const color = d3.scaleOrdinal(d3.schemePaired);
-			// const getColor = instance => categoryColors[instance] || "#d5d5d5";
-
-			// console.log([...new Set(data.map(d => d.instance))]);
 
 			let circles = article_circles.append("circle")
 				.transition()
@@ -568,15 +523,6 @@ function dv2(the_sort) { // region, category,
 				.attr("data-size", function(d,i){
 					return d.size
 				})
-				// .attr("fill", d => {
-				// 	console.log(d.instance, getColor(d.instance))
-				// 	return getColor(d.instance)
-				// })
-				// .attr("fill", d => color(d.instance))
-				
-				// .attr("fill", function(d,i){
-				// 	return "#00b2ff"
-				// })
 
 			let incipit = article_circles.append("circle")
 				.transition()
@@ -586,9 +532,6 @@ function dv2(the_sort) { // region, category,
 				})
 				.attr("cx",0)
 				.attr("cy",0)
-				// .attr("fill", function(d,i){
-				// 	return "#00b2ff"
-				// })
 				.attr("fill", d => categoryColors[d.instance_of] || categoryColors.default)
 				.attr("opacity",0.5)
 				.attr("r", function(d,i){
@@ -606,9 +549,6 @@ function dv2(the_sort) { // region, category,
 				})
 				.attr("cx",0)
 				.attr("cy",0)
-				// .attr("stroke", function(d,i){
-				// 	return "#00b2ff"
-				// })
 				.attr("stroke", d => categoryColors[d.instance_of] || categoryColors.default)
 				.attr("fill","transparent")
 				.attr("stroke-width",0.5)
@@ -644,8 +584,6 @@ function dv2(the_sort) { // region, category,
 				.duration(padlock_animation) 
 				.attr('stroke-width',1)
 				.attr("r",0)
-				// .transition()
-				// .delay(500)
 				.attr("fill", "transparent")
 				.attr("stroke", function (d){
 					if (d.restrictions != ''){
@@ -685,10 +623,6 @@ function dv2(the_sort) { // region, category,
 						return "transparent"
 					}
 				})
-				// .transition()
-				// .delay(1000)
-				// .ease(d3.easeLinear)
-				// .duration(padlock_animation) 
 				.attr("width",padlock_width)
 				.attr("height",padlock_width/5*4)
 			
@@ -703,6 +637,7 @@ function dv2(the_sort) { // region, category,
 				let new_sort = this.value;
 				// let new_region = region_box.options[region_box.selectedIndex].value;
 
+				// console.log(y_axis_value)
 				update_sort(new_sort)
 			});
 
@@ -801,10 +736,6 @@ function dv2(the_sort) { // region, category,
 					"images"		// 7
 				]
 
-				// svg.selectAll(".article")
-		       	// 	.data(filtered_data)
-		       	// 	.enter()
-
 				svg.selectAll(".article")
 					.transition()
 					.attr("transform", function(d,i){
@@ -838,7 +769,7 @@ function dv2(the_sort) { // region, category,
 						else if (the_sort == 9){
 							x_position = x(d.linguistic_versions)
 						}
-						else { // the_sort === undefined
+						else {
 							x_position = x(i)
 						}
 						// console.log(d.article,min,max,d.size,width,x_position)
@@ -850,228 +781,240 @@ function dv2(the_sort) { // region, category,
 
 						let direction = ''
 						if (the_sort == 1) { // title
-							direction = tooltip_direction(filtered_data, i, min, max, d.avg_pv, false)
+							direction = tooltip_direction(filtered_data, i, min, max, d.avg_pv, d.total_views, false)
 						}
 						else if (the_sort == 2){
-							direction = tooltip_direction(filtered_data,d.days,min,max,d.avg_pv, true)
+							direction = tooltip_direction(filtered_data, d.days, min, max, d.avg_pv, d.total_views, false)
 						}
 						else if (the_sort == 3){
-							direction = tooltip_direction(filtered_data,d.size,min,max,d.avg_pv, false)
+							direction = tooltip_direction(filtered_data, d.size, min, max, d.avg_pv, d.total_views, false)
 						}
 						else if (the_sort == 4){
-							direction = tooltip_direction(filtered_data,d.discussion_size,min,max,d.avg_pv, false)
+							direction = tooltip_direction(filtered_data, d.discussion_size, min, max, d.avg_pv, d.total_views, false)
 						}
 						else if (the_sort == 5){
-							direction = tooltip_direction(filtered_data,d.incipit_size,min,max,d.avg_pv, false)
+							direction = tooltip_direction(filtered_data, d.incipit_size, min, max, d.avg_pv, d.total_views, false)
 						}
 						else if (the_sort == 6){
-							direction = tooltip_direction(filtered_data,d.issues,min,max,d.avg_pv, false)
+							direction = tooltip_direction(filtered_data, d.issues, min, max, d.avg_pv, d.total_views, false)
 						}
 						else if (the_sort == 7){
-							direction = tooltip_direction(filtered_data,d.images,min,max,d.avg_pv, false)
+							direction = tooltip_direction(filtered_data, d.images, min, max, d.avg_pv, d.total_views, false)
 						}
 						else if (the_sort == 8){
-							direction = tooltip_direction(filtered_data,d.edits_editors_ratio,min,max,d.avg_pv, false)
+							direction = tooltip_direction(filtered_data, d.edits_editors_ratio, min, max, d.avg_pv, d.total_views, false)
 						}
 						else if (the_sort == 9){
-							direction = tooltip_direction(filtered_data,d.linguistic_versions,min,max,d.avg_pv, false)
+							direction = tooltip_direction(filtered_data, d.linguistic_versions, min, max, d.avg_pv, d.total_views, false)
 						}
 						return direction 
 					})
-
 				sidebar(2,filtered_data,the_sort)
 			}
-
 		}
-		display_data('all',the_sort,filter_item, limit_y_max) // region, category,
+		display_data('all',the_sort,filter_item, limit_y_max, y_axis_value) // region, category,
+
+		// yaxis label
+		let yaxis_label_box = plot.append("g")
+			.attr("class","yaxis_label")
+			.attr("transform","translate(7," + (height -18) + ")")
+			.attr("class","hover") 
+			.on("mouseover", y_axis_mouseover) 
+			.on("mouseout", y_axis_mouseout) 
+			.on("click", y_axis_switch) 
+	
+		let yaxis_label_rect = yaxis_label_box.append("rect")
+			.attr("width", 120)
+			.attr("height", 20)
+			.attr("transform","translate(0,-18)")
+			.attr("stroke", "gray")
+			.attr("fill","white")
+			.attr("opacity",0.8)
+
+		let yaxis_label = yaxis_label_box.append("text")
+			.attr("class","lang_switch") // axis_name
+			// .text("visite giornaliere (media)")
+			.text("average daily visits")
+			.attr("data-it","media visite giornaliere")
+			.attr("data-en","average daily visits")
+			.attr("id","yaxis_label")
+			.attr("y", -5)
+			.attr("x", 3)
+			.attr("font-size",font_size)
+
+		function y_axis_mouseover(){
+			d3.select(this)
+				.transition()
+				.duration(duration)
+				.attr("opacity",1)
+		}
+
+		function y_axis_mouseout(){
+			d3.select(this)
+				.transition()
+				.duration(duration)
+				.attr("opacity",0.8)
+		}
+
+		function y_axis_switch(){
+
+			if (y_axis_value == 'daily'){
+				y_axis_value = 'total'	
+				
+				d3.select(this).select('text')
+					.text("total visits")
+			}
+			else {
+				y_axis_value = 'daily'
+
+				d3.select(this).select('text')
+					.text("average daily visits")
+			}
+			
+			scale = 'linear'
+			// console.log(scale, y_axis_value)
+			update_scale(scale, y_axis_value, false)
+		}
 
 		// chart scale
 		// ---------------------------
+		
+		function update_scale(scale, y_axis_value, switch_log){
+
+			y = d3.scaleLinear()
+
+			if (switch_log == false){
+
+				if (y_axis_value == 'daily'){
+					y_min = d3.min(filtered_data, function(d) { 
+						return d.avg_pv;
+					})
+		
+					y_max = d3.max(filtered_data, function(d) { 
+						return d.avg_pv;
+					})
+				}
+				else {
+					y_min = d3.min(filtered_data, function(d) { 
+						return d.total_views;
+					})
+		
+					y_max = d3.max(filtered_data, function(d) { 
+						return d.total_views;
+					})
+				}
+			}
+
+			if (scale == "linear"){
+				y = d3.scaleLinear()
+					.domain([0,y_max+(y_max/100*10)])
+					.range([height - (margin.top * 1.6),0])
+			}
+			else if (scale == "log"){
+				y = d3.scaleSymlog(10)
+					.domain([0,y_max+(y_max/100*10)])
+					.range([height - (margin.top * 1.6),0])
+			}
+
+			// articles
+			svg.selectAll(".article_circles")
+				.transition()
+				.duration(200)
+				.attr("transform",function (d,i) {
+					let output = ''
+					if (y_axis_value == 'daily'){
+						output = "translate(" + 0 + "," + y(d.avg_pv) + ")"
+					}
+					else {
+						output = "translate(" + 0 + "," + y(d.total_views) + ")"
+					}
+					return output
+				})	
+
+			// y axis ticks text
+			svg.select("#yAxis")
+				.transition()
+				.duration(200)
+				.call(d3.axisLeft(y)) // it works
+
+			d3.select('#grid')
+				.transition()
+				.duration(200)
+				.call(d3.axisLeft(y)
+					.tickSize(-width-margin.left-margin.right-60)
+				)
+		}
 
 		function chart_scale(){
 
-			function update_scale(scale){
-				y = d3.scaleLinear()
+			function to_log(){
+				update_scale("log", y_axis_value, true)
 
+				the_path = load_path() 
+				scale_icon.style.background = "url(" + the_path + "assets/img/scale_linear.svg) center center / 55% no-repeat"
+				scale = "log"
+
+				tootip_linear.style.display = 'none'
+				tootip_log.style.display = 'block'
+			}
+
+			function to_linear(){
+				update_scale("linear", y_axis_value, true)
+
+				the_path = load_path() 
+				scale_icon.style.background = "url(" + the_path + "assets/img/scale_log.svg) center center / 55% no-repeat"
+				scale = "linear"
+
+				tootip_log.style.display = 'none'
+				tootip_linear.style.display = 'block'
+			}
+
+			let scale = "linear"
+			const switch_scale = document.getElementById("scale_button")
+			const scale_icon = document.getElementById("scale_button_icon")
+			const tootip_linear = document.getElementById("scale_tooltip_linear")
+			const tootip_log = document.getElementById("scale_tooltip_logarithmic")
+
+			switch_scale.addEventListener('click', (event) => {
 				if (scale == "linear"){
-					y = d3.scaleLinear()
-						.domain([0,y_max+(y_max/100*10)]) 
-						.range([height-margin.top,0])
+					to_log()
 				}
-				else if (scale == "log"){
-					y = d3.scaleSymlog(10)
-						.domain([0,y_max+(y_max/100*10)]) 
-						.range([height-margin.top,0])
+				else if (scale == "log") {
+					to_linear()
 				}
+			})
 
-				// articles
-				svg.selectAll(".article_circles")
-					.transition()
-					.duration(200)
-					.attr("transform",function (d,i) {
-						return "translate(" + 0 + "," + y(+d.avg_pv) + ")"
-					})	
+			// filter by page views an by instane
+			// --------------------
 
-				// y axis ticks text
-				svg.select("#yAxis")
-					.transition()
-					.duration(200)
-					.call(d3.axisLeft(y)) // it works
+			const display_filter = document.getElementById("display_filter")
+			const filter_instance = document.getElementById("filter_instance")
 
-				d3.select('#grid')
-					.transition()
-					.duration(200)
-					.call(d3.axisLeft(y)
-						.tickSize(-width-margin.left-margin.right-60)
-					)
-				}
+			display_filter.addEventListener('click', (event) => {
+				update_filter()
+			})
 
-				function to_log(){
-					update_scale("log")
-
-					the_path = load_path() 
-					scale_icon.style.background = "url(" + the_path + "assets/img/scale_linear.svg) center center / 55% no-repeat"
-					scale = "log"
-
-					tootip_linear.style.display = 'none'
-					tootip_log.style.display = 'block'
-				}
-
-				function to_linear(){
-					update_scale("linear")
-
-					the_path = load_path() 
-					scale_icon.style.background = "url(" + the_path + "assets/img/scale_log.svg) center center / 55% no-repeat"
-					scale = "linear"
-
-					tootip_log.style.display = 'none'
-					tootip_linear.style.display = 'block'
-				}
-
-				let scale = "linear"
-				const switch_scale = document.getElementById("scale_button")
-				const scale_icon = document.getElementById("scale_button_icon")
-				const tootip_linear = document.getElementById("scale_tooltip_linear")
-				const tootip_log = document.getElementById("scale_tooltip_logarithmic")
-
-				switch_scale.addEventListener('click', (event) => {
-					if (scale == "linear"){
-						to_log()
-					}
-					else if (scale == "log") {
-						to_linear()
-				    }
-				})
-
-				// filter by page views an by instane
-				// --------------------
-
-				const display_filter = document.getElementById("display_filter")
-				const filter_instance = document.getElementById("filter_instance")
-
-				display_filter.addEventListener('click', (event) => {
-					update_filter()
-				})
-
-				filter_instance.addEventListener('change', function() {
-					
-					// filter_instance.innerHTML = ""; 
-					// filter_instance.innerHTML = '<option value="all">all</option>';
-
-					update_filter()
-				})
+			filter_instance.addEventListener('change', function() {
+				update_filter()
+			})
+			
+			function update_filter(){
+				const min_pageviews = document.getElementById("min_pageviews")
+				const max_pageviews = document.getElementById("max_pageviews")
+				const the_instance = document.getElementById("filter_instance")
+				const sort_box = document.getElementById('sort_article')
 				
-				function update_filter(){
-					const min_pageviews = document.getElementById("min_pageviews")
-					const max_pageviews = document.getElementById("max_pageviews")
-					const the_instance = document.getElementById("filter_instance")
-					const sort_box = document.getElementById('sort_article')
-					
-					let new_sort = sort_box.value;
+				let new_sort = sort_box.value;
 
-					const new_limit_y_min = parseInt(min_pageviews.value)
-					const new_limit_y_max = parseInt(max_pageviews.value)
-					const instance = the_instance.value
+				const new_limit_y_min = parseInt(min_pageviews.value)
+				const new_limit_y_max = parseInt(max_pageviews.value)
+				const instance = the_instance.value
 
-					// console.log(instance, new_limit_y_min, new_limit_y_max)
-					display_data(instance, new_sort, new_limit_y_min, new_limit_y_max)
-				}
-
-				// document.onkeydown = function (e) {
-				//     var key = e.key;
-				//     if(key == 1) { // s
-				// 		to_linear()
-				//     }
-				//     else if (key == 2){
-				//     	to_log()
-				//     }
-				// };
-
-				// document.onkeydown = function (e) {
-				//     var key = e.key;
-					
-				// 	unit = 200
-					
-				//     if(key == 'q') { 
-				// 		max_update += unit
-				//     }
-				//     else if (key == 'a'){
-				// 		max_update -= unit
-				//     }
-
-				// 	if(key == 'w') { // w
-				// 		min_update += unit
-				//     }
-				//     else if (key == 's'){ // s
-				// 		min_update -= unit
-				//     }
-
-				// 	if (key == 'q' || key == 'a' || key == 'w' || key == 's'){
-				// 		setTimeout(function() { 
-				// 			new_limit_y_min = limit_y_min + min_update
-				// 			new_limit_y_max = limit_y_max + max_update
-	
-				// 			display_data(the_sort, new_limit_y_min, new_limit_y_max)
-	
-				// 			console.log(new_limit_y_min, new_limit_y_max)
-				// 		}, 500);
-				// 	}
-
-
-					
-				// };
-
+				// console.log(y_axis_value)
+				display_data(instance, new_sort, new_limit_y_min, new_limit_y_max, y_axis_value)
+			}
 		}
 		chart_scale()
-
-		// filter data by region
-		// ---------------------------
-
-		// display_data(new_sort) 
-
-		// const region_selection = document.getElementById('regions')
-
-		// region_selection.addEventListener('change', function() {
-		// 	let new_region = this.value;
-		// 	let new_category = $("#categories option:selected").val();
-		// 	let new_sort =  $("#sort_article option:selected").val();
-
-		// 	display_data(new_sort) // new_region, new_category,
-		// });
-
-		// filter data by category
-		// ---------------------------
-
-		// const category_selection = document.getElementById('categories')
-
-		// category_selection.addEventListener('change', function() {
-		// 	let new_region = $("#regions option:selected").val();
-		// 	let new_category = this.value;
-		// 	let new_sort =  $("#sort_article option:selected").val();
-
-		// 	display_data(new_sort) // new_region, new_category, 
-		// });
-
 
 		// make the visualization responsive
 		// ---------------------------
@@ -1137,7 +1080,7 @@ function dv2(the_sort) { // region, category,
 					else if (the_sort == 9){
 						x_position = x(d.linguistic_versions)
 					}
-					else { // the_sort === undefined
+					else { 
 						x_position = x(i)
 					}
 					// console.log(d.article,min,max,d.size,width,x_position)
@@ -1202,11 +1145,25 @@ function dv2(the_sort) { // region, category,
 	}
 }
 
-function tooltip_direction(data,x,x_min,x_max,y,invert){
+function tooltip_direction(data,x,x_min,x_max, y_avg, y_tot,invert){
+	// console.log(y_axis_value)
 
-	let y_max = d3.max(data, function(d) { 
-		return d.avg_pv;
-	})
+	let y_max = 0
+	let y = 0
+	if (y_axis_value == 'daily'){
+		y_max = d3.max(data, function(d) { 
+			return d.avg_pv;
+		})
+
+		y = y_avg
+	}
+	else {
+		y_max = d3.max(data, function(d) { 
+			return d.total_views;
+		})
+
+		y = y_tot
+	}
 
 	x = parseInt(x)
 	x_min = parseInt(x_min)
@@ -1242,69 +1199,10 @@ function tooltip_direction(data,x,x_min,x_max,y,invert){
 	}
 
 	const direction = n_s + w_e
+	// console.log(y, y_max, direction, y_axis_value)
+
 	return direction
 }
-
-// function get_category(id, name, instances){
-// 	let category = ''
-
-// 	const instances_array = instances.split(',')
-// 	name = name.toLowerCase()
-
-// 	instances_array.sort(function(a,b){
-//     	return a.localeCompare(b);
-// 	})
-
-// 	const categories = [
-// 		'museo',
-// 		'archivio',
-// 		'biblioteca',
-// 		'palazzo',
-// 		'pinacoteca'
-// 	]
-
-// 	// console.log(categories)
-// 	if (name.includes('museo')){
-// 		category = 'museo'
-// 	}
-// 	else if (name.includes('castello') || name.includes('castel')) {
-// 		category = 'castello'
-// 	}
-// 	else if (name.includes('archivio') || name.includes('cineteca')){
-// 		category = 'archivio'
-// 	}
-// 	else if (name.includes('biblioteca')) {
-// 		category = 'biblioteca'
-// 	}
-// 	else if (name.includes('chiesa') || name.includes('basilica') || name.includes('cattedrale') || name.includes('abbazia') || name.includes('cappella') || name.includes('oratorio')  || name.includes('santuario') ){
-// 		category = 'sito religioso'
-// 	}
-// 	else if (name.includes('archeologico') || name.includes('archeologica') || name.includes('anfiteatro') || name.includes('necropoli') ){
-// 		category = 'sito archeologico'
-// 	}
-// 	else {
-// 		if (instances_array.some(e => e.includes('museo'))){
-// 			category = 'museo'
-// 		}
-// 		else if (instances_array.some(e => e.includes('archivio'))){
-// 			category = 'archivio'
-// 		}
-// 		else if (instances_array.some(e => e.includes('pinacoteca'))){
-// 			category = 'pinacoteca'
-// 		}
-// 		else if (instances_array.some(e => e.includes('chiesa')) || instances_array.some(e => e.includes('basilica')) || instances_array.some(e => e.includes('cattedrale')) ){
-// 			category = 'sito religioso'
-// 		}
-// 		else if (instances_array.some(e => e.includes('parco archeologico')) || instances_array.some(e => e.includes('sito archeologico'))){
-// 			category = 'sito archeologico'
-// 		}
-// 		else {
-// 			category = 'altro luogo della cultura' // instances_array
-// 		}
-// 	}
-// 	// console.log(name, category)
-// 	return category
-// }
 
 window.onload = function() {
 	dv2(1);
