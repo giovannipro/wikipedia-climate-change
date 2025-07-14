@@ -7,8 +7,8 @@ const shiftx_article = 30;
 const wiki_link = "https://en.wikipedia.org/wiki/";
 const variation_line_opacity = 0.7;
 
-let limit_y_min = 300
-let limit_y_max = 115000
+let limit_y_min = 500
+let limit_y_max = 200000
 let max_update = 0
 let min_update = 0
 
@@ -171,14 +171,12 @@ function dv2(the_sort) {
 		max_pageviews.value = limit_y_max;
 
 		const filter_instance = document.getElementById("filter_instance");
-		// filter_instance.innerHTML = "<option value='all' class='lang_switch' data-it='all' data-en='all'>all</option>"; 
 
 		// remove categoris with count < 2
 		const counts = filtered_data.reduce((acc, d) => {
 			acc[d.instance_of] = (acc[d.instance_of] || 0) + 1;
 			return acc;
 		}, {});
-
 
 		const sortedCategories = Object.entries(counts)
 			.filter(([cat, count]) => count >= 1)
@@ -189,9 +187,6 @@ function dv2(the_sort) {
 				// Then sort alphabetically ascending
 				return a[0].localeCompare(b[0]);
 		});
-		// console.log(sortedCategories)
-
-		// the_instances = instances.sort((a, b) => a.article.localeCompare(b.article));
 		
 		sortedCategories.forEach(([cat, count]) => {
 			const option = document.createElement("option");
@@ -830,10 +825,11 @@ function dv2(the_sort) {
 			.attr("stroke", "gray")
 			.attr("fill","white")
 			.attr("opacity",0.8)
+			.attr("rx",5)
+			.attr("ry",5)
 
 		let yaxis_label = yaxis_label_box.append("text")
-			.attr("class","lang_switch") // axis_name
-			// .text("visite giornaliere (media)")
+			.attr("class","lang_switch")
 			.text("average daily visits")
 			.attr("data-it","media visite giornaliere")
 			.attr("data-en","average daily visits")
@@ -1145,8 +1141,9 @@ function dv2(the_sort) {
 	}
 }
 
-function tooltip_direction(data,x,x_min,x_max, y_avg, y_tot,invert){
-	// console.log(y_axis_value)
+function tooltip_direction(data, the_x, x_min, x_max, y_avg, y_tot,invert){
+
+	// console.log(the_x)
 
 	let y_max = 0
 	let y = 0
@@ -1165,7 +1162,7 @@ function tooltip_direction(data,x,x_min,x_max, y_avg, y_tot,invert){
 		y = y_tot
 	}
 
-	x = parseInt(x)
+	x = parseInt(the_x)
 	x_min = parseInt(x_min)
 	x_max = parseInt(x_max)
 
